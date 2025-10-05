@@ -7,4 +7,4 @@ const app = express();
  app.use("/api/v1/healthcheck",healthCjeckRouter)
 
 
-export default app;
+export default app; 
