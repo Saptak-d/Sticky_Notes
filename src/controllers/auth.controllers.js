@@ -9,7 +9,23 @@ import Mailgen from "mailgen"
 import { ApiResponse } from "../utils/api-response.js"
 import crypto from "crypto";
 
+ const  generateAccessAndRefreshTokens = async (userId)=>{
+        try {
+        const user = await User.findById(userId);
+         console.log(user)
+        const accessToken = user.generateAccessToken();
+        const refreshToken = user.generateRefereshToken();
+         // attach refresh token to the user document to avoid refreshing the access token with multiple refresh tokens
+                user.refreshToken = refreshToken;
+                await user.save({validateBeforeSave : false});
 
+                return {accessToken , refreshToken}
+
+
+        } catch (error) {
+                throw new ApiError(500 , "something went wrong while generating the access token ") 
+        }
+ }
 
 const registerUser =  asyncHandler( async (req,res)=>{
 
@@ -80,9 +96,54 @@ console.log("Verification URL:", `${req.protocol}://${req.get("host")}/api/v1/au
   
 }) 
 
-const loginuser =  asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
-}) 
+const loginUser =  asyncHandler( async (req,res)=>{
+
+       const { email, username, password } = req.body;
+    
+
+        if(!email || !username){
+              throw new ApiError(400, "All Filed is required")
+        }
+
+      const user  = await  User.findOne({$or: [ {email} , {username}]})
+
+
+      if(!user){
+          throw new ApiError(404, "User does not exist");
+      }
+    
+      // Compare the incoming password with hashed password
+      const isPasswordValid  = await user.ispasswordCorrect(password)
+
+        console.log("valid : ---------- " ,isPasswordValid)
+
+      if (!isPasswordValid) {
+                 throw new ApiError(401, "Invalid user credentials");
+         }
+         const{accessToken , refreshToken} = await generateAccessAndRefreshTokens(user._id)
+       
+
+         // get the user document ignoring the password and refreshToken field
+          const loggedInUser = await User.findById(user._id).select(
+                "-password -refreshToken  -emailVerificationToken -emailVerificationExpiry"
+          );
+            console.log("thi ---------------",loggedInUser);
+
+          const option = {
+                httpOnly : true,
+                secure: process.env.NODE_ENV === "production"
+          }
+           return res.status(200)
+           .cookie("accessToken",accessToken,option)
+           .cookie("refreshToken",refreshToken)
+           .json(
+                new ApiResponse(
+                        200,
+                 {user : loggedInUser, refreshToken ,accessToken},
+                 "User logged in successfully",
+                ),
+           );
+}) ;
 
 const logoutUser = asyncHandler( async (req,res)=>{
         const{email,username,password} = req.body   
@@ -144,4 +205,4 @@ const getCurrentUser = asyncHandler( async (req,res)=>{
 
 
 
-export {registerUser , verifyEmail}
+export {registerUser , verifyEmail ,loginUser}
