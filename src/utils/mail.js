@@ -1,4 +1,3 @@
-import { body } from "express-validator";
 import Mailgen from "mailgen";
 import nodemailer from "nodemailer"
 
@@ -42,7 +41,6 @@ const   sendMail  = async(options) =>{
 
     }
 
-
 const emailVerificationMailGenContent = (username,verificationURL) =>{
 
     return {
@@ -83,9 +81,9 @@ const forgotPasswordMailGenContent = (username,passwordResetURL) =>{
     }
 }
 
-// sendMail({
-//     email :user.email,
-//     subject : "Aaa",
-//     mailGenContent : emailVerificationMailGenContent(username,` `)
-    
-// })
+
+export {
+    emailVerificationMailGenContent,
+    forgotPasswordMailGenContent,
+    sendMail
+}
