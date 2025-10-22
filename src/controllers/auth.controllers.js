@@ -8,6 +8,7 @@ import {emailVerificationMailGenContent , forgotPasswordMailGenContent ,sendMail
 import Mailgen from "mailgen"
 import { ApiResponse } from "../utils/api-response.js"
 import crypto from "crypto";
+import { set } from "mongoose"
 
  const  generateAccessAndRefreshTokens = async (userId)=>{
         try {
@@ -135,7 +136,7 @@ const loginUser =  asyncHandler( async (req,res)=>{
           }
            return res.status(200)
            .cookie("accessToken",accessToken,option)
-           .cookie("refreshToken",refreshToken)
+           .cookie("refreshToken",refreshToken,option)
            .json(
                 new ApiResponse(
                         200,
@@ -144,10 +145,6 @@ const loginUser =  asyncHandler( async (req,res)=>{
                 ),
            );
 }) ;
-
-const logoutUser = asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
-}) 
 
 const verifyEmail = asyncHandler( async (req,res)=>{
 
@@ -176,6 +173,32 @@ const verifyEmail = asyncHandler( async (req,res)=>{
         new ApiResponse(200, {isEmailVerified : true},"Email is verified " ))
 
 }) 
+
+const logoutUser = asyncHandler( async (req,res)=>{
+ 
+        await User.findByIdAndUpdate( req.user._id ,
+           {
+                $set:{
+                        refreshToken : ""
+                }
+           },
+
+           {new:true}
+        
+        )
+        const option = {
+                httpOnly : true,
+                secure :process.env.NODE_ENV === "production",
+        }
+        res
+        .status(200)
+        .clearCookie("accessToken",option)
+        .clearCookie("refreshToken",option)
+        .json(new ApiResponse(200, {} ,"user Logout"));
+
+}) 
+
+
 
 const resendVerifycationEmail  = asyncHandler( async (req,res)=>{
         const{email,username,password} = req.body   

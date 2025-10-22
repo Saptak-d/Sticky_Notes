@@ -9,5 +9,6 @@ const router = Router()
  router.route("/register").post(userRegistrationValidator(),validator,registerUser);
  router.route("/verify-email/:verificationToken").get(verifyEmail)
  router.route("/login").post(loginUser)
+ router.route("/logout").post()
 
  export default router; 
