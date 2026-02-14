@@ -15,5 +15,4 @@ const storage = multer.diskStorage({
     limits :{
         fileSize : 1 * 1000 * 1000
     }
-    
     })
