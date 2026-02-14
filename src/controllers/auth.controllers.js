@@ -51,18 +51,8 @@ const registerUser =  asyncHandler(async(req,res)=>{
         console.log(hashedToken ,unHashedToken);
 
         await user.save({validateBeforeSave : false });
-
-         const mailContent = emailVerificationMailGenContent(user.username,
-         `${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${unHashedToken}`
-        );
-
-console.log("Mail content:", mailContent);
-console.log("user.email:", user.email);
-
-
-console.log("Verification URL:", `${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${unHashedToken}`);
-
-
+        
+    // Send mail
        await sendMail({
          email : user ?.email,
          subject : "Please verify your email",
