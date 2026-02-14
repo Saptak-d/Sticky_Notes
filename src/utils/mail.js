@@ -1,7 +1,7 @@
 import Mailgen from "mailgen";
 import nodemailer from "nodemailer"
 
-const   sendMail  = async(options) =>{
+const sendMail  = async(options) =>{
     const mailGenerator = new Mailgen({
     theme: 'default',
     product: {
@@ -10,8 +10,8 @@ const   sendMail  = async(options) =>{
     }
 });
 
-        var emailText = mailGenerator.generatePlaintext(options.mailGenContent);
-        var emailHtml = mailGenerator.generate(options.mailGenContent);
+        let emailText = mailGenerator.generatePlaintext(options.mailGenContent);
+        let emailHtml = mailGenerator.generate(options.mailGenContent);
 
 
         const transporter = nodemailer.createTransport({
@@ -23,6 +23,8 @@ const   sendMail  = async(options) =>{
           pass: process.env.MAILTRAP_Password,
          },
     });
+
+    
     const mail = {
      from: 'mail.taskmanager@example.com',
     to:options.email,

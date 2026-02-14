@@ -1,16 +1,12 @@
-
- import { body } from "express-validator"
 import {asyncHandler} from "../utils/async-handler.js"
-import {userRegistrationValidator} from "../validators/index.js"
 import { User } from "../models/user.models.js"
 import {ApiError} from "../utils/api-error.js"
 import {emailVerificationMailGenContent , forgotPasswordMailGenContent ,sendMail} from "../utils/mail.js"
-import Mailgen from "mailgen"
 import { ApiResponse } from "../utils/api-response.js"
 import crypto from "crypto";
-import { set } from "mongoose"
 
- const  generateAccessAndRefreshTokens = async (userId)=>{
+
+const  generateAccessAndRefreshTokens = async (userId)=>{
         try {
         const user = await User.findById(userId);
          console.log(user)
@@ -22,13 +18,12 @@ import { set } from "mongoose"
 
                 return {accessToken , refreshToken}
 
-
         } catch (error) {
                 throw new ApiError(500 , "something went wrong while generating the access token ") 
         }
  }
 
-const registerUser =  asyncHandler( async (req,res)=>{
+const registerUser =  asyncHandler(async(req,res)=>{
 
         const{email,username,password, fullname} = req.body  
 
@@ -37,7 +32,7 @@ const registerUser =  asyncHandler( async (req,res)=>{
         });
 
         if(existUser){
-              throw new ApiError(409 , "User with email or username is already exist  ")
+              throw new ApiError(409 , "User with email or username is already exist ")
         }
 
         const user = await User.create({
@@ -48,11 +43,6 @@ const registerUser =  asyncHandler( async (req,res)=>{
                 isEmailVerified: false,
         });
 
-          /**
-   * assign hashedToken and tokenExpiry in DB till user clicks on email verification link
-   * The email verification is handled by {@link verifyEmail}
-   */
-
         const {hashedToken , unHashedToken , tokenExpiry} = user.generateTemporatryToken()
         console.log(unHashedToken);
 
@@ -62,10 +52,10 @@ const registerUser =  asyncHandler( async (req,res)=>{
 
         await user.save({validateBeforeSave : false });
 
-         const mailContent = emailVerificationMailGenContent(
-  user.username,
-  `${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${unHashedToken}`
-);
+         const mailContent = emailVerificationMailGenContent(user.username,
+         `${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${unHashedToken}`
+        );
+
 console.log("Mail content:", mailContent);
 console.log("user.email:", user.email);
 
@@ -144,7 +134,7 @@ const loginUser =  asyncHandler( async (req,res)=>{
                  "User logged in successfully",
                 ),
            );
-}) ;
+});
 
 const verifyEmail = asyncHandler( async (req,res)=>{
 
@@ -197,8 +187,6 @@ const logoutUser = asyncHandler( async (req,res)=>{
         .json(new ApiResponse(200, {} ,"user Logout"));
 
 }) 
-
-
 
 const resendVerifycationEmail  = asyncHandler( async (req,res)=>{
         const{email,username,password} = req.body   

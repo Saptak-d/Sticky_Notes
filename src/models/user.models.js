@@ -2,16 +2,20 @@ import mongoose ,{Schema} from "mongoose"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 import  crypto from "crypto"
+import { type } from "os";
 const userSchema = new Schema({
     avatar : {
-        type :{
-            url : String,
-            localpath : String,
-        },
-        default :{
-            url :`https://placehold.co/600x400`,
-            localpath : ""
-        }
+      url : {
+        type : String ,
+         default :  "https://placehold.co/600x400",
+      },
+      localpath : {
+        type : String,
+        default : ""
+      },
+       public_id: {
+      type: String
+     }
     },
     username :{
         type : String ,
@@ -19,7 +23,6 @@ const userSchema = new Schema({
         unique : true,
         lowercase : true,
         trim : true,
-       
     },
     email:{
         type : String,
@@ -27,7 +30,6 @@ const userSchema = new Schema({
          unique : true,
          lowercase :true,
          trim : true,
-       
     },
     fullname :{
         type : String,
@@ -100,10 +102,11 @@ userSchema.methods.generateRefereshToken = function(){
 
 userSchema.methods.generateTemporatryToken = function(){
 
+     //this function is retun 2 type of token 1 is hash and another is unhased token coz we want to store the hased token in DB and retun unhased token in client side 
    const unHashedToken =  crypto.randomBytes(20).toString("hex")
 
 
-   const hashedToken = crypto.createHash("sha256") .update(unHashedToken).digest("hex")
+   const hashedToken = crypto.createHash("sha256").update(unHashedToken).digest("hex")
 
 
    const tokenExpiry = Date.now() + (20 * 60 * 1000 ) // 20 min
