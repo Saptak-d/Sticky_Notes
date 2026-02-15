@@ -4,6 +4,7 @@ import {ApiError} from "../utils/api-error.js"
 import {emailVerificationMailGenContent , forgotPasswordMailGenContent ,sendMail} from "../utils/mail.js"
 import { ApiResponse } from "../utils/api-response.js"
 import crypto from "crypto";
+import {uploadOnCloudinary} from "../utils/cloudinary.utils.js"
 
 
 const  generateAccessAndRefreshTokens = async (userId)=>{
@@ -25,8 +26,11 @@ const  generateAccessAndRefreshTokens = async (userId)=>{
 
 const registerUser =  asyncHandler(async(req,res)=>{
 
-        const{email,username,password, fullname} = req.body  
+        const{email,username,password, fullname} = req.body 
+        
+         const imageLocalpath = req.file?.path;
 
+         
         const existUser  = await  User.findOne({
           $or: [{email} , {username}],
         });
@@ -35,12 +39,22 @@ const registerUser =  asyncHandler(async(req,res)=>{
               throw new ApiError(409 , "User with email or username is already exist ")
         }
 
+        let avatarCloudLink;
+        
+          if(imageLocalpath){
+             avatarCloudLink = await  uploadOnCloudinary(imageLocalpath);
+          }
+
         const user = await User.create({
+                avatar : {
+                        url : avatarCloudLink?.secure_url || "",
+                        public_id : avatarCloudLink?.public_id  || "",
+                },
                 email,
                 password,
                 username,
                 fullname,
-                
+
                 isEmailVerified: false,
         });
 

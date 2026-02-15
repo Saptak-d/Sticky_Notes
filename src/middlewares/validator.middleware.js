@@ -13,6 +13,10 @@ import {ApiError} from "../utils/api-error.js"
      [err.path] : err.msg
    }));
 
+    if (req.file?.path) {
+      fs.unlinkSync(req.file.path);
+    }
+
     throw new ApiError(422,"Recieved data is not valid",extractedError)
   
 };

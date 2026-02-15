@@ -9,10 +9,6 @@ const userSchema = new Schema({
         type : String ,
          default :  "https://placehold.co/600x400",
       },
-      localpath : {
-        type : String,
-        default : ""
-      },
        public_id: {
       type: String
      }

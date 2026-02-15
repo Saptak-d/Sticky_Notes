@@ -6,8 +6,14 @@ import {registerUser,verifyEmail ,loginUser } from "../controllers/auth.controll
 
 const router = Router()
 
- router.route("/register").post(userRegistrationValidator(),validator,upload.single('avatar'),registerUser);
- 
+router.post(
+  "/register",
+  upload.single("avatar"),   
+  userRegistrationValidator(), 
+  validator,                
+  registerUser               
+);
+
  router.route("/verify-email/:verificationToken").get(verifyEmail)
  router.route("/login").post(loginUser)
 
