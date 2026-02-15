@@ -40,6 +40,7 @@ const registerUser =  asyncHandler(async(req,res)=>{
                 password,
                 username,
                 fullname,
+                
                 isEmailVerified: false,
         });
 
