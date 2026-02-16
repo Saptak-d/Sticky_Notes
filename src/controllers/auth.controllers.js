@@ -41,10 +41,13 @@ const registerUser =  asyncHandler(async(req,res)=>{
 
         let avatarCloudLink;
 
-          if(imageLocalpath){
-             avatarCloudLink = await  uploadOnCloudinary(imageLocalpath);
-          }
-
+          if (imageLocalpath) {
+         try {
+              avatarCloudLink = await uploadOnCloudinary(imageLocalpath);
+             } catch (error) {
+               throw new ApiError(500, "Avatar upload failed");
+           }
+         }
         const user = await User.create({
                 avatar : {
                  url : avatarCloudLink?.secure_url || "",
