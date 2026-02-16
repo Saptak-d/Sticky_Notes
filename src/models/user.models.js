@@ -96,7 +96,7 @@ userSchema.methods.generateRefereshToken = function(){
  * @description Method responsible for generating tokens for email verification, password reset etc.
  */
 
-userSchema.methods.generateTemporatryToken = function(){
+userSchema.methods.generateTemporaryToken = function(){
 
      //this function is retun 2 type of token 1 is hash and another is unhased token coz we want to store the hased token in DB and retun unhased token in client side 
    const unHashedToken =  crypto.randomBytes(20).toString("hex")

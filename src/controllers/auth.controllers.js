@@ -40,25 +40,24 @@ const registerUser =  asyncHandler(async(req,res)=>{
         }
 
         let avatarCloudLink;
-        
+
           if(imageLocalpath){
              avatarCloudLink = await  uploadOnCloudinary(imageLocalpath);
           }
 
         const user = await User.create({
                 avatar : {
-                        url : avatarCloudLink?.secure_url || "",
-                        public_id : avatarCloudLink?.public_id  || "",
+                 url : avatarCloudLink?.secure_url || "",
+                 public_id : avatarCloudLink?.public_id  || "",
                 },
                 email,
                 password,
                 username,
                 fullname,
-
                 isEmailVerified: false,
         });
 
-        const {hashedToken , unHashedToken , tokenExpiry} = user.generateTemporatryToken()
+        const {hashedToken , unHashedToken , tokenExpiry} = user.generateTemporaryToken()
         console.log(unHashedToken);
 
         user.emailVerificationToken = hashedToken;
@@ -68,13 +67,19 @@ const registerUser =  asyncHandler(async(req,res)=>{
         await user.save({validateBeforeSave : false });
         
     // Send mail
-       await sendMail({
-         email : user ?.email,
-         subject : "Please verify your email",
-         mailGenContent : emailVerificationMailGenContent(user.username , 
-        `${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${unHashedToken}`    
-         )  
-       })
+    try {
+           await sendMail({
+             email : user ?.email,
+             subject : "Please verify your email",
+             mailGenContent : emailVerificationMailGenContent(user.username , 
+            `${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${unHashedToken}`    
+             )  
+           })
+    } catch (error) {
+        await User.findByIdAndDelete(user._id)
+         throw new ApiError(500, "Email sending failed")
+    }
+
         const createdUser  = await User.findById(user._id).select(
                 "-password -refreshToken -emailVerificationToken -emailVerificationExpiry" 
         )
