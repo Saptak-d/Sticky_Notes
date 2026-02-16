@@ -47,7 +47,7 @@ const registerUser =  asyncHandler(async(req,res)=>{
              } catch (error) {
                throw new ApiError(500, "Avatar upload failed");
            }
-         }
+        }
         const user = await User.create({
                 avatar : {
                  url : avatarCloudLink?.secure_url || "",

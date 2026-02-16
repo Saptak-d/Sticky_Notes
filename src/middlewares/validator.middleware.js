@@ -1,8 +1,10 @@
 import  {validationResult}  from "express-validator"
 import {ApiError} from "../utils/api-error.js"
+import fs from "fs/promises";
 
 
- export const validator = (req, res, next) => {
+
+ export const validator = async(req, res, next) => {
   const errors = validationResult(req);
 
   if(errors.isEmpty()){
@@ -14,7 +16,8 @@ import {ApiError} from "../utils/api-error.js"
    }));
 
     if (req.file?.path) {
-      fs.unlinkSync(req.file.path);
+       await fs.unlink(req.file?.path);
+
     }
 
     throw new ApiError(422,"Recieved data is not valid",extractedError)
