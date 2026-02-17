@@ -38,11 +38,22 @@ const verifyEmailValidator = () =>{
   ];
 }
 
-const userLoginValidator = () => {
-  return [
-    body("email").isEmail().withMessage("Email is not valid"),
-    body("password").notEmpty().withMessage("Password can't be empty"),
-  ];
-};
+const loginUserValidator = () =>{
+   return[
+     body("password").trim()
+     .notEmpty().withMessage("The email is Required"),
+     
 
-export { userRegistrationValidator, verifyEmailValidator };
+    body("email").custom((value,{req})=>{
+       if(!req.body.email && !req.body.username){
+
+        throw new Error("Email or Username is required")
+       }
+       return true;
+    })
+   ]
+}
+
+
+
+export { userRegistrationValidator, verifyEmailValidator , loginUserValidator };

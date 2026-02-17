@@ -5,6 +5,7 @@ import {emailVerificationMailGenContent , forgotPasswordMailGenContent ,sendMail
 import { ApiResponse } from "../utils/api-response.js"
 import crypto from "crypto";
 import {uploadOnCloudinary} from "../utils/cloudinary.utils.js"
+import { use } from "react"
 
 
 const  generateAccessAndRefreshTokens = async (userId)=>{
@@ -65,7 +66,7 @@ const registerUser =  asyncHandler(async(req,res)=>{
 
         user.emailVerificationToken = hashedToken;
         user.emailVerificationExpiry = tokenExpiry;
-        console.log(hashedToken ,unHashedToken);
+;
 
         await user.save({validateBeforeSave : false });
         
@@ -103,14 +104,8 @@ const registerUser =  asyncHandler(async(req,res)=>{
 const loginUser =  asyncHandler( async (req,res)=>{
 
        const { email, username, password } = req.body;
-    
 
-        if(!email || !username){
-              throw new ApiError(400, "All Filed is required")
-        }
-
-      const user  = await  User.findOne({$or: [ {email} , {username}]})
-
+        const user  = await  User.findOne({$or: [ {email} , {username}]})
 
       if(!user){
           throw new ApiError(404, "User does not exist");
@@ -119,11 +114,31 @@ const loginUser =  asyncHandler( async (req,res)=>{
       // Compare the incoming password with hashed password
       const isPasswordValid  = await user.ispasswordCorrect(password)
 
-        console.log("valid : ---------- " ,isPasswordValid)
-
       if (!isPasswordValid) {
-                 throw new ApiError(401, "Invalid user credentials");
+                 throw new ApiError(401, "Invalid Passwworrd");
          }
+
+         if(!user.isEmailVerified){
+                const {hashedToken , unHashedToken , tokenExpiry} = user.generateTemporaryToken()
+
+                 user.emailVerificationToken = hashedToken;
+                 user.emailVerificationExpiry = tokenExpiry;
+                   await user.save({validateBeforeSave : false });
+
+                await sendMail({
+                        email : email,
+                        subject : "Please verify your email",
+                        mailGenContent : emailVerificationMailGenContent(user.username , 
+                       `${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${unHashedToken}`)  
+                });
+
+                return res
+                .status(200)
+                .json(
+                        new ApiResponse(200,"a verification mail send to your mail")
+                )
+         }
+
          const{accessToken , refreshToken} = await generateAccessAndRefreshTokens(user._id)
        
 
