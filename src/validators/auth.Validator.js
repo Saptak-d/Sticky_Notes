@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+import {param}  from "express-validator"
 
 const userRegistrationValidator = () => {
   return [
@@ -21,10 +22,21 @@ const userRegistrationValidator = () => {
       
       body("fullname")
       .trim()
-      .notEmpty().withMessage("The Full Name is required ")
+      .notEmpty()
+      .withMessage("The Full Name is required ")
 
   ];
 };
+
+const verifyEmailValidator = () =>{
+  return [
+     param("verificationToken")
+     .notEmpty()
+     .withMessage("verificationToken is required")
+     .isLength({ min: 20 })
+     .withMessage("Invalid token")
+  ];
+}
 
 const userLoginValidator = () => {
   return [
@@ -33,4 +45,4 @@ const userLoginValidator = () => {
   ];
 };
 
-export { userRegistrationValidator, userLoginValidator };
+export { userRegistrationValidator, verifyEmailValidator };

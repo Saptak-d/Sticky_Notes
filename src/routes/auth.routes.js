@@ -1,7 +1,7 @@
 import { Router } from "express";
 import  {upload}  from "../middlewares/multer.middleware.js"
 import {validator} from "../middlewares/validator.middleware.js"
-import {userRegistrationValidator } from "../validators/auth.Validator.js"
+import {userRegistrationValidator, verifyEmailValidator } from "../validators/auth.Validator.js"
 import {registerUser,verifyEmail ,loginUser } from "../controllers/auth.controllers.js"
 
 const router = Router()
@@ -14,7 +14,7 @@ router.post(
   registerUser               
 );
 
- router.route("/verify-email/:verificationToken").get(verifyEmail)
+ router.route("/verify-email/:verificationToken").get(verifyEmailValidator(), validator, verifyEmail)
  router.route("/login").post(loginUser)
 
 
