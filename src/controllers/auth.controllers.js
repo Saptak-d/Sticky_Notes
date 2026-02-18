@@ -62,11 +62,9 @@ const registerUser =  asyncHandler(async(req,res)=>{
         });
 
         const {hashedToken , unHashedToken , tokenExpiry} = user.generateTemporaryToken()
-        console.log(unHashedToken);
 
         user.emailVerificationToken = hashedToken;
         user.emailVerificationExpiry = tokenExpiry;
-;
 
         await user.save({validateBeforeSave : false });
         
@@ -206,7 +204,8 @@ const logoutUser = asyncHandler( async (req,res)=>{
 const resendVerifycationEmail  = asyncHandler( async (req,res)=>{
         const{email,username,password} = req.body   
         
-        const user = await User.findOne({$or : [{email} , {username}]}).select("-password refreshToken")
+        const user = await User.findOne({$or : [{email} , {username}]})
+
 
         if(!user){
                 throw new ApiError(402,"The user is not Found")
@@ -223,15 +222,12 @@ const resendVerifycationEmail  = asyncHandler( async (req,res)=>{
                 
                   user.emailVerificationToken = hashedToken;
                   user.emailVerificationExpiry = tokenExpiry;
-                  user.save({validateBeforeSave : false});
+                  await  user.save({validateBeforeSave : false});
 
                 await sendMail({
-                        name : user.name,
+                        email : user?.email,
                         subject : "Please verify your email",
-                        mailGenContent : emailVerificationMailGenContent(user.username,
-                                `${req.protocol}://${req.get("host")}//api/v1/auth/verify-email/${unHashedToken}`
-                        )
-
+                        mailGenContent : emailVerificationMailGenContent(user.username,`${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${unHashedToken}`)
                 })
         }catch(error){
                 throw new ApiError(500, "Internal server error");

@@ -64,6 +64,7 @@ const resendVerifycationEmailValidator = ()=>{
          if(!req.body?.email && !req.body?.username){
           throw new Error("Email or Username is required")
          }
+         return true;
        })
     ]
 }
