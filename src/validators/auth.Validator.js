@@ -54,6 +54,20 @@ const loginUserValidator = () =>{
    ]
 }
 
+const resendVerifycationEmailValidator = ()=>{
+    return [
+       body("password").trim()
+       .notEmpty().withMessage("The paassword is Required "),
+
+       body("Email").custom((value,{req})=>{
+         
+         if(!req.body?.email && !req.body?.username){
+          throw new Error("Email or Username is required")
+         }
+       })
+    ]
+}
 
 
-export { userRegistrationValidator, verifyEmailValidator , loginUserValidator };
+
+export { userRegistrationValidator, verifyEmailValidator , loginUserValidator, resendVerifycationEmailValidator};
