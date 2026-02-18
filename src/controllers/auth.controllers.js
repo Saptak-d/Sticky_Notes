@@ -194,6 +194,10 @@ const verifyEmail = asyncHandler( async (req,res)=>{
 }) 
 
 const logoutUser = asyncHandler( async (req,res)=>{
+
+        if(!req?.user){
+                throw new ApiError(402,"You Need to Login First")
+        }
  
         await User.findByIdAndUpdate( req.user._id ,
            {
@@ -203,7 +207,6 @@ const logoutUser = asyncHandler( async (req,res)=>{
            },
 
            {new:true}
-        
         )
         const option = {
                 httpOnly : true,
@@ -245,4 +248,4 @@ const getCurrentUser = asyncHandler( async (req,res)=>{
 
 
 
-export {registerUser , verifyEmail ,loginUser}
+export {registerUser , verifyEmail ,loginUser,logoutUser}

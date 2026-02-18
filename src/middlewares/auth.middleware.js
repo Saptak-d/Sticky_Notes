@@ -1,6 +1,6 @@
-import { User } from "../models/user.models";
-import { ApiError } from "../utils/api-error";
-import { asyncHandler } from "../utils/async-handler"
+import { User } from "../models/user.models.js";
+import { ApiError } from "../utils/api-error.js";
+import { asyncHandler } from "../utils/async-handler.js"
 import jwt from "jsonwebtoken"
 
 
@@ -10,7 +10,7 @@ export const  verifyJWT = asyncHandler(async(req,res,next)=>{
 
 try {
     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer", "");
-     if(token){
+     if(!token){
         throw new ApiError(401,"The user need to Login First")
      }
        const dcryptToken = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
