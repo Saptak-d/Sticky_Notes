@@ -18,7 +18,7 @@ router.post(
  router.route("/verify-email/:verificationToken").get(verifyEmailValidator(), validator, verifyEmail)
  router.route("/login").post(loginUserValidator(),validator,loginUser)
  router.route("/logout").get(verifyJWT,logoutUser)
-
+ router.route("/resendVerifycationEmail").post(resendVerifycationEmailValidator(),validator,resendVerifycationEmail)
 
 
 
