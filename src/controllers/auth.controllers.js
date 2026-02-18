@@ -119,24 +119,7 @@ const loginUser =  asyncHandler( async (req,res)=>{
          }
 
          if(!user.isEmailVerified){
-                const {hashedToken , unHashedToken , tokenExpiry} = user.generateTemporaryToken()
-
-                 user.emailVerificationToken = hashedToken;
-                 user.emailVerificationExpiry = tokenExpiry;
-                   await user.save({validateBeforeSave : false });
-
-                await sendMail({
-                        email : email,
-                        subject : "Please verify your email",
-                        mailGenContent : emailVerificationMailGenContent(user.username , 
-                       `${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${unHashedToken}`)  
-                });
-
-                return res
-                .status(200)
-                .json(
-                        new ApiResponse(200,"a verification mail send to your mail")
-                )
+                        throw new ApiError(402,"User Email is not Verified please Verify Your Email Fist")
          }
 
          const{accessToken , refreshToken} = await generateAccessAndRefreshTokens(user._id)
@@ -222,6 +205,43 @@ const logoutUser = asyncHandler( async (req,res)=>{
 
 const resendVerifycationEmail  = asyncHandler( async (req,res)=>{
         const{email,username,password} = req.body   
+        
+        const user = await User.findOne({$or : [{email} , {username}]}).select("-password refreshToken")
+
+        if(!user){
+                throw new ApiError(402,"The user is not Found")
+        }
+
+        const ispasswordCorrect = user.ispasswordCorrect(password);
+
+        if(!ispasswordCorrect){
+                throw new ApiError(400,"Invalid credentials")
+        }
+
+        try{
+                const {hashedToken , unHashedToken , tokenExpiry} = user.generateTemporaryToken()
+                
+                  user.emailVerificationToken = hashedToken;
+                  user.emailVerificationExpiry = tokenExpiry;
+                  user.save({validateBeforeSave : false});
+
+                await sendMail({
+                        name : user.name,
+                        subject : "Please verify your email",
+                        mailGenContent : emailVerificationMailGenContent(user.username,
+                                `${req.protocol}://${req.get("host")}//api/v1/auth/verify-email/${unHashedToken}`
+                        )
+
+                })
+        }catch(error){
+                throw new ApiError(500, "Internal server error");
+        }
+
+        res.
+        status(200)
+        .json(
+                new ApiResponse(200,"The Email verification Link has Sent to your Email")
+        )
 }) 
 
 const refreshAccessToken = asyncHandler( async (req,res)=>{
@@ -248,4 +268,4 @@ const getCurrentUser = asyncHandler( async (req,res)=>{
 
 
 
-export {registerUser , verifyEmail ,loginUser,logoutUser}
+export {registerUser , verifyEmail ,loginUser,logoutUser,resendVerifycationEmail}
