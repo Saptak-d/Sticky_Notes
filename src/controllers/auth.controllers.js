@@ -5,13 +5,11 @@ import {emailVerificationMailGenContent , forgotPasswordMailGenContent ,sendMail
 import { ApiResponse } from "../utils/api-response.js"
 import crypto from "crypto";
 import {uploadOnCloudinary} from "../utils/cloudinary.utils.js"
-import { use } from "react"
-
+import jwt from "jsonwebtoken"
 
 const  generateAccessAndRefreshTokens = async (userId)=>{
         try {
         const user = await User.findById(userId);
-         console.log(user)
         const accessToken = user.generateAccessToken();
         const refreshToken = user.generateRefereshToken();
          // attach refresh token to the user document to avoid refreshing the access token with multiple refresh tokens
@@ -241,7 +239,57 @@ const resendVerifycationEmail  = asyncHandler( async (req,res)=>{
 }) 
 
 const refreshAccessToken = asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
+        const incomingRefreshToken = req.cookies?.refreshToken || req.body.refreshToken
+
+        if(!incomingRefreshToken ){
+                throw new ApiError(400,"you need to login")
+        }
+        let decordeToken;
+
+       try {
+          decordeToken = jwt.verify(
+                incomingRefreshToken ,
+                process.env.REFRESH_TOKEN_SECRET
+        );
+        } catch (error) {
+                throw new ApiError(401,"Invalid or expired refresh token")
+        }
+
+        const user = await User.findById(decordeToken._id).select("-password");
+
+        if(!user){
+                throw new ApiError(401, "User not Found")
+        }
+
+        if(incomingRefreshToken  !== user.refreshToken){
+                throw new ApiError(401,"Refresh token mismatch")
+        }
+
+        const {accessToken , refreshToken} = await generateAccessAndRefreshTokens(user._id);
+
+        if(!accessToken || !refreshToken){
+                throw new ApiError(400,"Something went wrong while generating the tokens")
+        }
+
+        const options = {
+                httpOnly : true ,
+                secure   : true,
+        }
+
+        return res
+        .status(200)
+        .cookie("accessToken",accessToken,options)
+        .cookie("refreshToken",refreshToken,options)
+        .json(
+                new ApiResponse(200,
+                        {
+                                user : user 
+                        },
+                        "access Token is Refreshed successfully"
+                )
+        )
+
+
 }) 
 
 const forgotPasswordRequest = asyncHandler( async (req,res)=>{
