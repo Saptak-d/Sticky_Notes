@@ -312,4 +312,12 @@ const getCurrentUser = asyncHandler( async (req,res)=>{
 
 
 
-export {registerUser , verifyEmail ,loginUser,logoutUser,resendVerifycationEmail}
+export {registerUser, 
+        verifyEmail ,
+        loginUser,
+        logoutUser,
+        resendVerifycationEmail, 
+        refreshAccessToken,
+        
+
+     }
