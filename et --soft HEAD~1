@@ -1,0 +1,197 @@
+[33mcommit 06750e8fd1d09251400563fe38bb6dd4fd4b49c1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sat Feb 28 11:19:20 2026 +0530
+
+    create the forgotPasswordRequestValidator
+
+[33mcommit 5318e00d2a6a4d76a5b8b04b78002cb55f401927[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sat Feb 28 11:15:21 2026 +0530
+
+    create forgetPasswordRequest controller
+
+[33mcommit 9ceba1301ce9ce0b658e3e20156aae9a4eea9ffa[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Fri Feb 27 23:34:16 2026 +0530
+
+    setup the refreshAccessToken route and controller
+
+[33mcommit 7244906cd98bef4290e6068c314a60c3f80c4e29[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Fri Feb 27 23:23:06 2026 +0530
+
+    create the refreshAccessToken controller
+
+[33mcommit fb5329f15c5a3fc76f42b2db4cbbebf6f83ec2a9[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Wed Feb 18 17:31:59 2026 +0530
+
+    fix some bugs
+
+[33mcommit 6781a730b3819a2a6a618d923d2c4848d8d3b0c7[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Wed Feb 18 17:13:15 2026 +0530
+
+    create the route setup for resendverificationEmail contrller and  route
+
+[33mcommit 685dd7d5611e5183a31f770b66bc3ac4c9becf3d[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Wed Feb 18 17:12:11 2026 +0530
+
+    create the resendVerificationEmailValidator
+
+[33mcommit 042d20090b8237bfcbb19a35ece898e97b41ec0d[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Wed Feb 18 16:32:17 2026 +0530
+
+    update login controller and create the resendVerifycationEmail controller
+
+[33mcommit 10896df141fe8288ef9ecfcc00f12f4c8d75d9ad[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Wed Feb 18 12:33:07 2026 +0530
+
+    fix some bugs and create the router setup and middleware setup for logout controller and route
+
+[33mcommit 7c90ebb5432c5116595542ee137cd5b8ed7fd4dd[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Tue Feb 17 23:40:49 2026 +0530
+
+    create the middleware to verifyJwt for acceesstoken
+
+[33mcommit 6a4db718b66e2605a7b44f66c6ed0862bf95f4ec[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Tue Feb 17 22:26:18 2026 +0530
+
+    create the validator for  login controller
+
+[33mcommit 2e42c7fb3a1f3c3bcc45ca2d2105be607ae0c325[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Tue Feb 17 13:37:24 2026 +0530
+
+    create the validator for verifyEmail controller and fix some logics
+
+[33mcommit 7396fa4144d146be5864a60cb633ee462f9ce6e5[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Tue Feb 17 01:26:23 2026 +0530
+
+    fix lot of bugs
+
+[33mcommit 74221118be872ffa652f73ed8d111fb604b1b495[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Mon Feb 16 22:27:23 2026 +0530
+
+    update the register controller add rollback for cloudinary upload failure
+
+[33mcommit b2f34f033ee769a6795f62b7f36fd2a28ead1603[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Mon Feb 16 22:19:26 2026 +0530
+
+    change the register controller logic and fix some bugs
+
+[33mcommit 4e7e78f435d9e79d8c1e2ee014f57974932669e5[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sun Feb 15 23:50:58 2026 +0530
+
+    update the express-validator validate middleware logic and also update the register user controller logic
+
+[33mcommit 29a7d5f17a5629ded59f6bdb3a21049d8156c44f[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sun Feb 15 22:47:09 2026 +0530
+
+    create the deleteOnCloudinary utill to delete the files from the cloude
+
+[33mcommit a082b38d9c8d1e8f022d7f5474ab734786bda290[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sun Feb 15 22:36:59 2026 +0530
+
+    create the utils function for uploading to the cloud
+
+[33mcommit 1c23919209ef230e0abcc203f007cf4f784a2cdb[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sun Feb 15 21:44:20 2026 +0530
+
+    update the auth router for register controller
+
+[33mcommit 88550f6103b1979f08f3c2e3406a2b0f9ac31706[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sat Feb 14 18:37:36 2026 +0530
+
+    change the logic of validator middleware to production style
+
+[33mcommit 9b5a8e901136bac4059c3653d786b74265764649[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sat Feb 14 18:23:46 2026 +0530
+
+    change the userRegistrationValidator logic
+
+[33mcommit 7529cf3641fa5ba7ac82ab27f792c463c95f7ebb[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sat Feb 14 18:17:53 2026 +0530
+
+    change the auth controller's register User controller
+
+[33mcommit 88a30d55cdc8e0ce0c1fd1f8fa53802e7487a35d[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sat Feb 14 17:35:09 2026 +0530
+
+    change the userSchema structure
+
+[33mcommit 11e89fe0dd3538fa7880cc86177ca45cb9ac52c2[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Mon Jan 26 23:49:22 2026 +0530
+
+    create the DB schema Designs
+
+[33mcommit 09871ae3009a8fc5dbb59f3535795f36df293f73[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Mon Jan 26 23:31:47 2026 +0530
+
+    changes of logic fix bug and started this project for next 1 week
+
+[33mcommit e2921c901e921adb56fc24b6861004343bea6c76[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Tue Dec 9 03:43:26 2025 +0530
+
+    fixing some litle config and change the DB URL also
+
+[33mcommit 0c00795f47cbc9d3b8692546035816ea3d8356eb[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Wed Oct 22 23:40:28 2025 +0530
+
+    commit:6 - write the logout in user controller
+
+[33mcommit ea169efc8a68d31c10b074c4e7fe6b00731deeb2[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Mon Oct 20 01:32:41 2025 +0530
+
+    commit:5 write login controller and login route and setup them
+
+[33mcommit d2ca3f06222b981bbb977174e45e3d60383f0f62[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sun Oct 19 20:11:08 2025 +0530
+
+    commit:4 write auth route's register and verification email controllers and setup it with mailgen ,  nodemailer and mailtrap
+
+[33mcommit 40fdfecbdd82f205e3ef713d174ae3d33b7683b1[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sat Oct 11 02:45:54 2025 +0530
+
+    commit:3 setup mailgen to Design email and node mailer to send the mail also write the multer middleware to accept the file also modify auth route
+
+[33mcommit 1574bfc8a7f1fc86a71c13bdce9235560467aa37[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sun Oct 5 23:45:05 2025 +0530
+
+    make auth controller  and health controller and crate one validator file for registration user and login user
+
+[33mcommit 8c2549a57e873f59c43604f02c86d0d283409958[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Thu Oct 2 01:03:12 2025 +0530
+
+    make the routes and controllers and the Aws healthcare route and controllers : Second commit
+
+[33mcommit 3642d0f471b862e8c99caaa40f1bc1d088a5fafb[m
+Author: saptak dutta <duttasaptak79@gmail.com>
+Date:   Sat Sep 27 23:59:57 2025 +0530
+
+    first commit

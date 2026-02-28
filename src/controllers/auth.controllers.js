@@ -325,7 +325,6 @@ const forgotPasswordRequest = asyncHandler( async (req,res)=>{
                         `${req.protocol}://${req.get("host")/api/v1/auth}`
                 )
         })
-
         return res
         .status(200)
         .json(

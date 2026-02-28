@@ -20,6 +20,7 @@ router.post(
  router.route("/logout").get(verifyJWT,logoutUser)
  router.route("/resendVerifycationEmail").post(resendVerifycationEmailValidator(),validator,resendVerifycationEmail)
  router.route("/refreshAccessToken").get(refreshAccessToken)
+ router.route("/")
 
 
 

@@ -69,6 +69,14 @@ const resendVerifycationEmailValidator = ()=>{
     ]
 }
 
+const forgotPasswordRequestValidator = ()=>{
+  return[
+    body("email").custom((value,{req})=>{
+      if(!req.body.email && !req.body.username)
+        throw new Error("email or userName is required")
+    })
+  ]
+}
 
 
-export { userRegistrationValidator, verifyEmailValidator , loginUserValidator, resendVerifycationEmailValidator};
+export { userRegistrationValidator, verifyEmailValidator , loginUserValidator, resendVerifycationEmailValidator , forgotPasswordRequestValidator};
