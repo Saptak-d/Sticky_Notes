@@ -324,7 +324,7 @@ const forgotPasswordRequest = asyncHandler( async (req,res)=>{
                 email : email,
                 subject : "Reset Your Password",
                 mailGenContent : forgotPasswordMailGenContent(user.username,
-                        `${req.protocol}://${req.get("host")}/`
+                        `${req.protocol}://${req.get("host")}/api/v1/auth/`
                 )
         })
 
@@ -336,7 +336,34 @@ const forgotPasswordRequest = asyncHandler( async (req,res)=>{
 }) 
 
 const changeCurrentPassword = asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
+        const{password} = req.body 
+         const {unHashedToken} = req.params;
+
+         const hashedToken = crypto.createHash("sha256").update(unHashedToken).digest("hex");
+
+         if(!hashedToken){
+                throw new ApiError(403,"invalid request check your URL");
+         }
+
+         const user = await User.findOne({forgotpasswordToken : hashedToken , forgotpasswordExpiry : {$gt : Date.now()}})
+
+         if(!user){
+                throw new ApiError(403, "Invalid Request Check Your URL")
+         }
+
+         user.password = password;
+         user.forgotpasswordToken = undefined;
+         user.forgotpasswordExpiry = undefined;
+         user.refreshToken = undefined;
+
+         await user.save();
+
+         res
+         .status(200)
+         .json(
+                new ApiResponse(200,"The password has been Changed")
+         )
+
 }) 
 
 const getCurrentUser = asyncHandler( async (req,res)=>{
