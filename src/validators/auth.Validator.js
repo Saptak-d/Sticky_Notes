@@ -79,5 +79,19 @@ const forgotPasswordRequestValidator = ()=>{
   ]
 }
 
+const changeCurrentPasswordValidator  = ()=>{
+  return [
+     body("password").trim()
+     .notEmpty().withMessage("The password is Required")
+     .isLength({min : 3}).withMessage("The password Should at least 4 charcter ")
+     .isLength({max : 13}).withMessage("The password can't exceed  more then 13 characters"),
 
-export { userRegistrationValidator, verifyEmailValidator , loginUserValidator, resendVerifycationEmailValidator , forgotPasswordRequestValidator};
+     param("unHashedToken")
+     .notEmpty().withMessage("The Token is Required")
+      .isLength({ min: 20 }).withMessage("Invalid token")
+
+  ]
+}
+
+
+export { userRegistrationValidator, verifyEmailValidator , loginUserValidator, resendVerifycationEmailValidator , forgotPasswordRequestValidator,changeCurrentPasswordValidator};
