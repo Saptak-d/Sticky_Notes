@@ -384,7 +384,8 @@ export {registerUser,
         logoutUser,
         resendVerifycationEmail, 
         refreshAccessToken,
-        forgotPasswordRequest
+        forgotPasswordRequest,
+        changeCurrentPassword
         
 
      }
