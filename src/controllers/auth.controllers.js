@@ -354,6 +354,7 @@ export {registerUser,
         logoutUser,
         resendVerifycationEmail, 
         refreshAccessToken,
+        forgotPasswordRequest
         
 
      }
