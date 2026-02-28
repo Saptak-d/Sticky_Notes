@@ -74,6 +74,7 @@ const forgotPasswordRequestValidator = ()=>{
     body("email").custom((value,{req})=>{
       if(!req.body.email && !req.body.username)
         throw new Error("email or userName is required")
+       return true; 
     })
   ]
 }
