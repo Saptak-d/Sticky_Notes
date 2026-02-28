@@ -1,11 +1,12 @@
 import {asyncHandler} from "../utils/async-handler.js"
 import { User } from "../models/user.models.js"
 import {ApiError} from "../utils/api-error.js"
-import {emailVerificationMailGenContent , forgotPasswordMailGenContent ,sendMail} from "../utils/mail.js"
+import {emailVerificationMailGenContent , forgotPasswordMailGenContent ,sendMail,sendMail} from "../utils/mail.js"
 import { ApiResponse } from "../utils/api-response.js"
 import crypto from "crypto";
 import {uploadOnCloudinary} from "../utils/cloudinary.utils.js"
 import jwt from "jsonwebtoken"
+import { use } from "react"
 
 const  generateAccessAndRefreshTokens = async (userId)=>{
         try {
@@ -293,7 +294,43 @@ const refreshAccessToken = asyncHandler( async (req,res)=>{
 }) 
 
 const forgotPasswordRequest = asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
+        const{email,username} = req.body; 
+
+        const user =  await User.findOne({email,username}).select("-refreshToken");
+
+        if(!user){
+                return res
+                .status(200)
+                .json(
+                        
+                        new ApiResponse(200,"The ResetPassword link Shared to your Email")
+                )
+        }
+
+        const {hashedToken , unHashedToken , tokenExpiry} = user.generateTemporaryToken()
+
+        if(!hashedToken || !unHashedToken || !tokenExpiry){
+                throw new ApiError(500,"Error while getting Tokens")
+        }
+
+        user.forgotpasswordToken = unHashedToken ;
+        user.forgotpasswordExpiry = tokenExpiry;
+
+        await user.save({validateBeforeSave : false})
+
+        const sendMail = await sendMail({
+                email : user?.email,
+                subject : "Reset Your Password",
+                mailGenContent : forgotPasswordMailGenContent(user.username,
+                        `${req.protocol}://${req.get("host")/api/v1/auth}`
+                )
+        })
+
+        return res
+        .status(200)
+        .json(
+                new ApiError(200,"The reset password link has shared to your Email")
+        )
 }) 
 
 const changeCurrentPassword = asyncHandler( async (req,res)=>{
