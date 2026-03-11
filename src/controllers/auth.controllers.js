@@ -324,7 +324,7 @@ const forgotPasswordRequest = asyncHandler( async (req,res)=>{
                 email : email,
                 subject : "Reset Your Password",
                 mailGenContent : forgotPasswordMailGenContent(user.username,
-                        `${req.protocol}://${req.get("host")}/api/v1/auth/`
+                        `${req.protocol}://${req.get("host")}/api/v1/auth/changeCurrentPassword/${unHashedToken}`
                 )
         })
 
@@ -367,7 +367,26 @@ const changeCurrentPassword = asyncHandler( async (req,res)=>{
 }) 
 
 const getCurrentUser = asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
+
+        const user = req.user;
+
+        if(!user){
+         throw new ApiError(401,"The User is need to login");
+        }
+
+        const userDetails = await User.findById(user._id).select("-password -refreshToken")
+
+        if(!userDetails){
+                  throw new ApiError(400,"The User Details is not Found");
+        }
+
+        return res
+        .status(200)
+        .json(
+                new ApiResponse(200,userDetails,"The user Details fetched Successfully")
+        )
+
+
 }) 
 
 
