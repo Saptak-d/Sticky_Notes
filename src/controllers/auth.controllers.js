@@ -369,11 +369,11 @@ const changeCurrentPassword = asyncHandler( async (req,res)=>{
 const getCurrentUser = asyncHandler( async (req,res)=>{
 
         const user = req.user;
+       
 
         if(!user){
          throw new ApiError(401,"The User is need to login");
         }
-
         const userDetails = await User.findById(user._id).select("-password -refreshToken")
 
         if(!userDetails){
@@ -385,17 +385,7 @@ const getCurrentUser = asyncHandler( async (req,res)=>{
         .json(
                 new ApiResponse(200,userDetails,"The user Details fetched Successfully")
         )
-
-
 }) 
-
-
-
-
-
-
-
-
 
 export {registerUser, 
         verifyEmail ,
@@ -404,7 +394,8 @@ export {registerUser,
         resendVerifycationEmail, 
         refreshAccessToken,
         forgotPasswordRequest,
-        changeCurrentPassword
+        changeCurrentPassword,
+        getCurrentUser
         
 
      }

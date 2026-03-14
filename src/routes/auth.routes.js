@@ -3,7 +3,7 @@ import  {upload}  from "../middlewares/multer.middleware.js"
 import {validator} from "../middlewares/validator.middleware.js"
 import {verifyJWT} from "../middlewares/auth.middleware.js"
 import {userRegistrationValidator, verifyEmailValidator , loginUserValidator, resendVerifycationEmailValidator , forgotPasswordRequestValidator, changeCurrentPasswordValidator} from "../validators/auth.Validator.js"
-import {registerUser,verifyEmail ,loginUser ,logoutUser, resendVerifycationEmail ,refreshAccessToken,forgotPasswordRequest,changeCurrentPassword} from "../controllers/auth.controllers.js"
+import {registerUser,verifyEmail ,loginUser ,logoutUser, resendVerifycationEmail ,refreshAccessToken,forgotPasswordRequest,changeCurrentPassword,getCurrentUser} from "../controllers/auth.controllers.js"
 
 const router = Router()
 
@@ -14,7 +14,6 @@ router.post(
   validator,                
   registerUser               
 );
-
  router.route("/verify-email/:verificationToken").get(verifyEmailValidator(), validator, verifyEmail)
  router.route("/login").post(loginUserValidator(),validator,loginUser)
  router.route("/logout").get(verifyJWT,logoutUser)
@@ -22,13 +21,7 @@ router.post(
  router.route("/refreshAccessToken").get(refreshAccessToken)
  router.route("/forgotPasswordRequest").post(forgotPasswordRequestValidator(),validator,forgotPasswordRequest);
  router.route("/changeCurrentPassword/:unHashedToken").post(changeCurrentPasswordValidator(),validator,changeCurrentPassword)
-
-
-
-
-
-
- // Secured routes
+ router.route("/getCurrentUser").get(verifyJWT, getCurrentUser);
 
 
  export default router; 
