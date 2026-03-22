@@ -11,8 +11,17 @@ const createProjectValidator = ()=>{
     ]
 }
 
+const getProjectsByIdValidator = ()=>{
+    return [
+        param("projectId").trim()
+        .notEmpty().withMessage("the ProjectID is required")
+    ]
+}
+
 
 
 export{
-    createProjectValidator
+    createProjectValidator,
+    getProjectsByIdValidator
+    
 }

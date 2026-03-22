@@ -13,7 +13,21 @@ const getProjects = asyncHandler( async (req,res)=>{
 
 
 const getProjectsById = asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
+        const { projectId } = req.params;  
+        console.log("the project id is ",projectId)
+
+        const project  = await Project.findById(projectId);
+
+        if(!project){
+                throw new ApiError(404,"Project not Found")
+        }
+
+       return res
+       .status(200)
+       .json(
+        new ApiResponse(200,project,"the project is  successfully fetched ")
+       ) 
+
 }) 
 
 
@@ -67,6 +81,8 @@ const deleteMember = asyncHandler( async (req,res)=>{
         const{email,username,password} = req.body   
 }) 
 
-export{createProject
+export{createProject,
+        getProjectsById,
+
         
 }
