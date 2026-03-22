@@ -370,7 +370,6 @@ const getCurrentUser = asyncHandler( async (req,res)=>{
 
         const user = req.user;
        
-
         if(!user){
          throw new ApiError(401,"The User is need to login");
         }
@@ -395,7 +394,7 @@ export {registerUser,
         refreshAccessToken,
         forgotPasswordRequest,
         changeCurrentPassword,
-        getCurrentUser
+        getCurrentUser,
         
 
      }

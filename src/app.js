@@ -13,6 +13,10 @@ const app = express();
 import authRoute  from "./routes/auth.routes.js"
  app.use("/api/v1/auth",authRoute)
 
+import projectRouter from "./routes/project.routes.js"
+app.use("/api/v1/project",projectRouter);
+
+
 
  app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500
