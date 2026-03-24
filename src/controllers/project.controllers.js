@@ -86,7 +86,22 @@ const updateProject = asyncHandler( async (req,res)=>{
 }) 
 
 const deleteProject = asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
+             const {projectId} =  req.params;
+             if(!projectId){
+                throw new ApiError(401,"INVALID PROJECT id")
+             }
+
+   const project  = await Project.findByIdAndDelete(projectId);
+
+   if(!project){
+         throw new ApiError(500,"Internal Server Error")
+   }
+
+   return res.status(200)
+   .json(
+        new ApiError(200,project, "Project Deleted Successfully")
+   )
+
 }) 
 
 
@@ -113,6 +128,8 @@ export{
         createProject,
         getProjectsById,
         updateProject,
+        deleteProject,
+        
         
 
 

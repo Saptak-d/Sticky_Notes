@@ -8,7 +8,7 @@ const router = Router()
 
 router.route("/createProject").post(verifyJWT,createProjectValidator(),validator,createProject)
 router.route("/getProjectsById/:projectId").get(verifyJWT,getProjectsByIdValidator(),validator,getProjectsById);
-router.route("/updateProject").post(verifyJWT,updateProjectValidator(),validator,updateProject)
+router.route("/updateProject/:projectId").patch(verifyJWT,updateProjectValidator(),validator,updateProject)
 
 
 
