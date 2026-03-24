@@ -20,6 +20,10 @@ const getProjectsByIdValidator = ()=>{
 
 const updateProjectValidator = ()=>{
     return [
+        
+        param("projectId").trim()
+        .notEmpty().withMessage("The project id is required"),
+
           body("name").trim()
         .notEmpty().withMessage("THe project name section is required"),
 
@@ -27,7 +31,6 @@ const updateProjectValidator = ()=>{
         .notEmpty().withMessage("The project description is required")
     ]
 }
-
 
 
 export{

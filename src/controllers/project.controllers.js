@@ -109,11 +109,12 @@ const deleteMember = asyncHandler( async (req,res)=>{
         const{email,username,password} = req.body   
 }) 
 
-export{createProject,
+export{
+        createProject,
         getProjectsById,
         updateProject,
-        updateProject,
         
+
 
         
 }
