@@ -101,7 +101,6 @@ const deleteProject = asyncHandler( async (req,res)=>{
    .json(
         new ApiError(200,project, "Project Deleted Successfully")
    )
-
 }) 
 
 
@@ -129,7 +128,7 @@ export{
         getProjectsById,
         updateProject,
         deleteProject,
-        
+
         
 
 

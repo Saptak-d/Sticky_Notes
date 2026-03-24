@@ -32,10 +32,18 @@ const updateProjectValidator = ()=>{
     ]
 }
 
+const deleteProjectValidator = ()=>{
+    return[
+        param("projectId").trim()
+        .notEmpty().withMessage("The ProjectID is required")
+    ]
+}
+
 
 export{
     createProjectValidator,
     getProjectsByIdValidator,
-    updateProjectValidator
+    updateProjectValidator,
+    deleteProjectValidator
     
 }
