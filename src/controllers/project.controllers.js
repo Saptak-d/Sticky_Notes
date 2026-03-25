@@ -10,6 +10,8 @@ import {ProjectMember} from "../models/projectmember.models.js"
 
 const getProjects = asyncHandler( async (req,res)=>{
         
+
+
 }) 
 
 
@@ -134,7 +136,6 @@ const addMemberToProject = asyncHandler( async (req,res)=>{
                 }
         );
 
-
         return res.status(200)
         .json(
                 new ApiResponse(200,{},"Project member added successfully")
@@ -143,7 +144,13 @@ const addMemberToProject = asyncHandler( async (req,res)=>{
 }) 
 
 const getProjectMembers = asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
+        const{projectId} = req.params;
+        const project = await Project.findById(projectId);
+        if(projectId){
+                throw new ApiError(404,"Project is not Found")
+        }
+
+        
 }) 
 
 const updateProjectMembers = asyncHandler( async (req,res)=>{
@@ -162,6 +169,7 @@ export{
         getProjectsById,
         updateProject,
         deleteProject,
+        addMemberToProject
 
         
 

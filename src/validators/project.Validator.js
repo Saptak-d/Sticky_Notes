@@ -1,5 +1,6 @@
 import { body } from "express-validator";
 import { param } from "express-validator";
+import { ApiError } from "../utils/api-error";
 
 const createProjectValidator = ()=>{
     return [
@@ -39,11 +40,24 @@ const deleteProjectValidator = ()=>{
     ]
 }
 
+const addMemberToProjectValidator = ()=>{
+    return [
+        body().custom((value, {req})=>{
+            if(!req.body.email && !req.body.username){
+                throw new ApiError(401,"Either email or username is required");
+            }
+            return true;
+        }),
+
+    ]
+}
+
 
 export{
     createProjectValidator,
     getProjectsByIdValidator,
     updateProjectValidator,
-    deleteProjectValidator
+    deleteProjectValidator,
+    addMemberToProjectValidator
     
 }
