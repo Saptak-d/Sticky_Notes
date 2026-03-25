@@ -1,6 +1,6 @@
 import { Router } from "express";
-import {createProject,getProjectsById,updateProject,deleteProject,addMemberToProject} from "../controllers/project.controllers.js"
-import {createProjectValidator,getProjectsByIdValidator,updateProjectValidator,deleteProjectValidator, addMemberToProjectValidator} from "../validators/project.Validator.js"
+import {createProject,getProjectsById,updateProject,deleteProject,addMemberToProject,getProjectMembers} from "../controllers/project.controllers.js"
+import {createProjectValidator,getProjectsByIdValidator,updateProjectValidator,deleteProjectValidator, addMemberToProjectValidator,getProjectMembersValidator} from "../validators/project.Validator.js"
 import {validator} from "../middlewares/validator.middleware.js"
 import {verifyJWT} from "../middlewares/auth.middleware.js"
 
@@ -11,6 +11,7 @@ router.route("/getProjectsById/:projectId").get(verifyJWT,getProjectsByIdValidat
 router.route("/updateProject/:projectId").patch(verifyJWT,updateProjectValidator(),validator,updateProject)
 router.route("/deleteProject/:projectId").delete(verifyJWT,deleteProjectValidator(),validator,deleteProject)
 router.route("/addMemberToProject/:projectId").put(verifyJWT,addMemberToProjectValidator(),validator,addMemberToProject)
+router.route("/getProjectMembers/:projectId").get(verifyJWT,getProjectMembersValidator(),validator,getProjectMembers)
 
 
 

@@ -146,7 +146,8 @@ const getProjectMembers = asyncHandler( async (req,res)=>{
         const{projectId} = req.params;
         const projectMembers  = await ProjectMember.find({
                 project : projectId
-        }).populate("user", "username email fullname avatar");
+        }).populate("user", "username email fullname avatar")
+        .populate("project")
 
         if(!projectMembers){
                 throw new ApiError(404,"Project Members Not Found")
@@ -176,7 +177,9 @@ export{
         getProjectsById,
         updateProject,
         deleteProject,
-        addMemberToProject
+        addMemberToProject,
+        getProjectMembers,
+
 
         
 
