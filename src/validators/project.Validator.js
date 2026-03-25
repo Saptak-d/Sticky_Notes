@@ -52,12 +52,20 @@ const addMemberToProjectValidator = ()=>{
     ]
 }
 
+const getProjectMembersValidator = ()=>{
+    return [
+        param("projectId").trim()
+        .notEmpty().withMessage("The Project ID is required")
+    ]
+}
+
 
 export{
     createProjectValidator,
     getProjectsByIdValidator,
     updateProjectValidator,
     deleteProjectValidator,
-    addMemberToProjectValidator
+    addMemberToProjectValidator,
+    getProjectMembersValidator,
     
 }
