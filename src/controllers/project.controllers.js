@@ -2,9 +2,11 @@ import { asyncHandler } from "../utils/async-handler.js"
 import { ApiError } from "../utils/api-error.js"
 import { ApiResponse } from "../utils/api-response.js"
 import {Project} from "../models/project.models.js" 
+import {User} from "../models/user.models.js"
 import mongoose from "mongoose"
 import {ProjectMember} from "../models/projectmember.models.js"
 import {AvailableUserRoles, UserRolesEnum} from "../utils/constants.js"
+import {ProjectMember} from "../models/projectmember.models.js"
 
 const getProjects = asyncHandler( async (req,res)=>{
         
@@ -26,7 +28,6 @@ const getProjectsById = asyncHandler( async (req,res)=>{
        .json(
         new ApiResponse(200,project,"the project is  successfully fetched ")
        ) 
-
 }) 
 
 
@@ -73,7 +74,6 @@ const updateProject = asyncHandler( async (req,res)=>{
                 },
                 {new : true}
         )
-
         if(!updatedProject){
                 throw new ApiError(500,"Internal server Error while updating the Document")
         }
@@ -99,13 +99,47 @@ const deleteProject = asyncHandler( async (req,res)=>{
 
    return res.status(200)
    .json(
-        new ApiError(200,project, "Project Deleted Successfully")
+        new ApiResponse(200,project,"Project Deleted Successfully")
    )
 }) 
 
 
 const addMemberToProject = asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
+        
+        const {email ,username ,role} = req.body;
+        const {projectId} = req.params;
+
+        const user = await User.findOne({
+         $or: [{username} , {email}],
+        });
+
+        if(!user){
+                throw new ApiError(404,"User does not Found")
+        }
+
+        await ProjectMember.findOneAndUpdate(
+                {
+                    user : mongoose.Types.ObjectId(user._id),
+                    project : mongoose.Types.ObjectId(projectId)
+                },
+                {
+                        user : mongoose.Types.ObjectId(user._id),
+                        project : mongoose.Types.ObjectId(projectId),
+                        role : role,
+                },
+                {
+                        new : true ,
+                        upsert : true,      // Upsert: adds member if not exists, else updates role
+                        
+                }
+        );
+
+
+        return res.status(200)
+        .json(
+                new ApiResponse(200,{},"Project member added successfully")
+        )
+         
 }) 
 
 const getProjectMembers = asyncHandler( async (req,res)=>{

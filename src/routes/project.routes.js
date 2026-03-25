@@ -7,9 +7,11 @@ import {verifyJWT} from "../middlewares/auth.middleware.js"
 const router = Router()
 
 router.route("/createProject").post(verifyJWT,createProjectValidator(),validator,createProject)
-router.route("/getProjectsById/:projectId").get(verifyJWT,getProjectsByIdValidator(),validator,getProjectsById);
+router.route("/getProjectsById/:projectId").get(verifyJWT,getProjectsByIdValidator(),validator,getProjectsById)
 router.route("/updateProject/:projectId").patch(verifyJWT,updateProjectValidator(),validator,updateProject)
 router.route("/deleteProject/:projectId").delete(verifyJWT,deleteProjectValidator(),validator,deleteProject)
+
+
 
 
  export default router; 
