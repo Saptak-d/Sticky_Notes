@@ -121,12 +121,12 @@ const addMemberToProject = asyncHandler( async (req,res)=>{
 
         await ProjectMember.findOneAndUpdate(
                 {
-                    user : mongoose.Types.ObjectId(user._id),
-                    project : mongoose.Types.ObjectId(projectId)
+                    user : new mongoose.Types.ObjectId(user._id),
+                    project : new mongoose.Types.ObjectId(projectId)
                 },
                 {
-                        user : mongoose.Types.ObjectId(user._id),
-                        project : mongoose.Types.ObjectId(projectId),
+                        user : new mongoose.Types.ObjectId(user._id),
+                        project : new mongoose.Types.ObjectId(projectId),
                         role : role,
                 },
                 {
@@ -144,13 +144,21 @@ const addMemberToProject = asyncHandler( async (req,res)=>{
 
 const getProjectMembers = asyncHandler( async (req,res)=>{
         const{projectId} = req.params;
-        const project = await Project.findById(projectId);
-        if(projectId){
-                throw new ApiError(404,"Project is not Found")
+        const projectMembers  = await ProjectMember.find({
+                project : projectId
+        }).populate("user", "username email fullname avatar");
+
+        if(!projectMembers){
+                throw new ApiError(404,"Project Members Not Found")
         }
 
+        return res
+        .status(200)
+        .json(
+                new ApiResponse(200,projectMembers,"The Project Members are fetched Successfully")
+        )
         
-}) 
+})
 
 const updateProjectMembers = asyncHandler( async (req,res)=>{
         const{email,username,password} = req.body   
