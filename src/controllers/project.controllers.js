@@ -4,9 +4,9 @@ import { ApiResponse } from "../utils/api-response.js"
 import {Project} from "../models/project.models.js" 
 import {User} from "../models/user.models.js"
 import mongoose from "mongoose"
-import {ProjectMember} from "../models/projectmember.models.js"
 import {AvailableUserRoles, UserRolesEnum} from "../utils/constants.js"
 import {ProjectMember} from "../models/projectmember.models.js"
+
 
 const getProjects = asyncHandler( async (req,res)=>{
         
@@ -131,8 +131,7 @@ const addMemberToProject = asyncHandler( async (req,res)=>{
                 },
                 {
                         new : true ,
-                        upsert : true,      // Upsert: adds member if not exists, else updates role
-                        
+                        upsert : true,      // Upsert: adds member if not exists, else updates role                
                 }
         );
 

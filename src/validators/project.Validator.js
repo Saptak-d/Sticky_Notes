@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 import { param } from "express-validator";
-import { ApiError } from "../utils/api-error";
+import { ApiError } from "../utils/api-error.js";
 
 const createProjectValidator = ()=>{
     return [
