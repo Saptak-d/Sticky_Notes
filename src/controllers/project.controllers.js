@@ -160,9 +160,6 @@ const getProjectMembers = asyncHandler( async (req,res)=>{
         )
 })
 
-const updateProjectMembers = asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
-}) 
 
 const updateProjectMemberRole = asyncHandler( async (req,res)=>{
         const {projectId , userId} = req.params;
@@ -174,7 +171,7 @@ const updateProjectMemberRole = asyncHandler( async (req,res)=>{
                 project : projectId,
                 user : userId
         });
-        
+
         if(!projectMember){
                 throw new ApiError(404,"Project member not Found")
         }
@@ -199,7 +196,23 @@ const updateProjectMemberRole = asyncHandler( async (req,res)=>{
 });
 
 const deleteMember = asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
+        const {projectId, userId}  = req.params;
+         
+         const projectMember = await ProjectMember.findOneAndDelete({
+                project : projectId,
+                user : userId
+         })
+
+         if(!projectMember){
+                throw new ApiError(404,"Project Member is not found");
+         }
+
+         return res
+         .status(200)
+         .json(
+              new  ApiResponse(200,projectMember,"Project Member Deleted SuccessFully")
+         )
+
 }) 
 
 export{

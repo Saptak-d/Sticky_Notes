@@ -17,8 +17,7 @@ try {
       
     
         const user = await User.findById(dcryptToken._id).select("-password -refreshToken")
-        console.log(user)
-    
+   
         if(!user){
             throw new ApiError(401, "Invalid AccessToken ")
         }
