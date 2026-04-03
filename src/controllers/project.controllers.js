@@ -222,7 +222,8 @@ export{
         deleteProject,
         addMemberToProject,
         getProjectMembers,
-        updateProjectMemberRole
+        updateProjectMemberRole,
+        deleteMember
 
 
         

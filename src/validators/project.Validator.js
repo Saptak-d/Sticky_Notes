@@ -72,6 +72,16 @@ const updateProjectMemberRoleValidator = ()=>{
      .notEmpty().withMessage("The role is required")
 
    ]
+};
+
+const deleteMemberValidator =()=>{
+    return[
+        param("projectId").trim()
+        .notEmpty().withMessage("The ProjectID is Required"),
+
+        param("userId").trim()
+        .notEmpty().withMessage("The UserID is Required")
+    ]
 }
 
 export{
@@ -82,6 +92,8 @@ export{
     addMemberToProjectValidator,
     getProjectMembersValidator,
     updateProjectMemberRoleValidator,
+    deleteMemberValidator,
+    
     
     
 }
