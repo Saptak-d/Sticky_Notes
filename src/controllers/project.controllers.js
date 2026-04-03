@@ -158,7 +158,6 @@ const getProjectMembers = asyncHandler( async (req,res)=>{
         .json(
                 new ApiResponse(200,projectMembers,"The Project Members are fetched Successfully")
         )
-        
 })
 
 const updateProjectMembers = asyncHandler( async (req,res)=>{
@@ -166,8 +165,39 @@ const updateProjectMembers = asyncHandler( async (req,res)=>{
 }) 
 
 const updateProjectMemberRole = asyncHandler( async (req,res)=>{
-        const{email,username,password} = req.body   
-}) 
+        const {projectId , userId} = req.params;
+        const {newRole} = req.body;
+        if(!AvailableUserRoles.includes(newRole)){
+                throw new ApiError(400,"Invalid Role")
+        }
+        const projectMember = await ProjectMember.findOne({
+                projectId : new mongoose.Types.ObjectId(projectId),
+                user : new mongoose.Types.ObjectId(userId)
+        });
+
+        if(!projectMember){
+                throw new ApiError(404,"Project member not Found")
+        }
+
+        projectMember = await ProjectMember.findByIdAndUpdate(
+                projectMember._id,
+                {role : newRole},
+                {new : true}
+        );
+        
+        if(!projectMember){
+                throw new ApiError(404,"Project member not found")
+        }
+        return res
+         .status(200)
+         .json(
+                new ApiResponse(200,
+                        projectMember,
+                        "Project Member role updated Successfully"
+                ),
+         );
+});
+
 const deleteMember = asyncHandler( async (req,res)=>{
         const{email,username,password} = req.body   
 }) 
@@ -179,6 +209,7 @@ export{
         deleteProject,
         addMemberToProject,
         getProjectMembers,
+        updateProjectMemberRole
 
 
         
