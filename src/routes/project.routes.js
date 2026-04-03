@@ -12,7 +12,7 @@ router.route("/updateProject/:projectId").patch(verifyJWT,updateProjectValidator
 router.route("/deleteProject/:projectId").delete(verifyJWT,deleteProjectValidator(),validator,deleteProject)
 router.route("/addMemberToProject/:projectId").put(verifyJWT,addMemberToProjectValidator(),validator,addMemberToProject)
 router.route("/getProjectMembers/:projectId").get(verifyJWT,getProjectMembersValidator(),validator,getProjectMembers)
-router.route("/updateProjectMemberRole/:projectId").post(verifyJWT,updateProjectMemberRoleValidator(),validator,updateProjectMemberRole)
+router.route("/updateProjectMemberRole/:projectId/:userId").post(verifyJWT,updateProjectMemberRoleValidator(),validator,updateProjectMemberRole)
 
 
 

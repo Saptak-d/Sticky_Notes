@@ -165,21 +165,16 @@ const updateProjectMembers = asyncHandler( async (req,res)=>{
 }) 
 
 const updateProjectMemberRole = asyncHandler( async (req,res)=>{
-        const {projectId } = req.params;
+        const {projectId , userId} = req.params;
         const {newRole} = req.body;
-        const userId = req.user._id;
-        if(!userId){
-                throw new ApiError(404,"User need to login first")
-        }
-        
         if(!AvailableUserRoles.includes(newRole)){
                 throw new ApiError(400,"Invalid Role")
         }
-        const projectMember = await ProjectMember.findOne({
-                projectId : new mongoose.Types.ObjectId(projectId),
-                user : new mongoose.Types.ObjectId(userId)
+        let projectMember = await ProjectMember.findOne({
+                project : projectId,
+                user : userId
         });
-
+        
         if(!projectMember){
                 throw new ApiError(404,"Project member not Found")
         }
