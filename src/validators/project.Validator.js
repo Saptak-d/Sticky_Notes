@@ -66,9 +66,6 @@ const updateProjectMemberRoleValidator = ()=>{
      param("projectId").trim()
      .notEmpty().withMessage("The Project ID is required"),
 
-     param("userId").trim()
-     .notEmpty().withMessage("The UserID is Required"),
-
      body("newRole").trim()
      .notEmpty().withMessage("The role is required")
 
@@ -83,6 +80,6 @@ export{
     addMemberToProjectValidator,
     getProjectMembersValidator,
     updateProjectMemberRoleValidator,
-    
+
     
 }

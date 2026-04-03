@@ -165,8 +165,13 @@ const updateProjectMembers = asyncHandler( async (req,res)=>{
 }) 
 
 const updateProjectMemberRole = asyncHandler( async (req,res)=>{
-        const {projectId , userId} = req.params;
+        const {projectId } = req.params;
         const {newRole} = req.body;
+        const userId = req.user._id;
+        if(!userId){
+                throw new ApiError(404,"User need to login first")
+        }
+        
         if(!AvailableUserRoles.includes(newRole)){
                 throw new ApiError(400,"Invalid Role")
         }
