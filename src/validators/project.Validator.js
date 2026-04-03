@@ -59,6 +59,21 @@ const getProjectMembersValidator = ()=>{
     ]
 }
 
+const updateProjectMemberRoleValidator = ()=>{
+     const {projectId , userId} = req.params;
+        const {newRole} = req.body;
+   return[
+     param("projectId").trim()
+     .notEmpty().withMessage("The Project ID is required"),
+
+     param("userId").trim()
+     .notEmpty().withMessage("The UserID is Required"),
+
+     body("newRole").trim()
+     .notEmpty().withMessage("The role is required")
+
+   ]
+}
 
 export{
     createProjectValidator,
@@ -67,5 +82,7 @@ export{
     deleteProjectValidator,
     addMemberToProjectValidator,
     getProjectMembersValidator,
+    updateProjectMemberRoleValidator,
+    
     
 }
