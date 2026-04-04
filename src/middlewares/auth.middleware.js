@@ -1,3 +1,5 @@
+import mongoose, { Mongoose } from "mongoose";
+import { ProjectMember } from "../models/projectmember.models.js";
 import { User } from "../models/user.models.js";
 import { ApiError } from "../utils/api-error.js";
 import { asyncHandler } from "../utils/async-handler.js"
@@ -28,4 +30,27 @@ try {
 } catch (error) {
     throw new ApiError(401,error?.message || "Invalid AccessToken")
 }
-})
+});
+
+export const validateProjectPermission = (role = [])=> 
+    asyncHandler(async(req,res,next)=>{
+    const {projectId} = req.params;
+    if(!projectId){
+        throw new ApiError(400,"Project ID is Missing");
+    }
+    const project = await ProjectMember.findOne({
+        project : projectId,
+        user : new mongoose.Types.ObjectId(req.user._id)
+    });
+
+    if(!project){
+        throw new ApiError(404,"You are not part of this project")
+    }
+    const givenRole = project?.role;
+    if(!role.includes(givenRole)){
+        throw new ApiError(403,
+             "You do not have permission to perform this action",
+        )
+    }
+    next();
+});
