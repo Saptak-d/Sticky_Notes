@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {createProject,getProjectsById,updateProject,deleteProject,addMemberToProject,getProjectMembers ,updateProjectMemberRole,deleteMember} from "../controllers/project.controllers.js"
+import {createProject,getProjectsById,updateProject,deleteProject,addMemberToProject,getProjectMembers ,updateProjectMemberRole,deleteMember,getProjects} from "../controllers/project.controllers.js"
 import {createProjectValidator,getProjectsByIdValidator,updateProjectValidator,deleteProjectValidator, addMemberToProjectValidator,getProjectMembersValidator,updateProjectMemberRoleValidator,deleteMemberValidator} from "../validators/project.Validator.js"
 import {validator} from "../middlewares/validator.middleware.js"
 import {verifyJWT,validateProjectPermission} from "../middlewares/auth.middleware.js"
@@ -9,6 +9,7 @@ const router = Router()
 router.use(verifyJWT);
 
 router.route("/")
+     .get(getProjects)
      .post(createProjectValidator(),validator,createProject)
 
 router.route("/:projectId")

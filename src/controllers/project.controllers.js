@@ -6,10 +6,63 @@ import {User} from "../models/user.models.js"
 import mongoose from "mongoose"
 import {AvailableUserRoles, UserRolesEnum} from "../utils/constants.js"
 import {ProjectMember} from "../models/projectmember.models.js"
+import { deserialize } from "v8"
 
 
 const getProjects = asyncHandler( async (req,res)=>{
         
+        const projects = await ProjectMember.aggregate([
+                {
+                        $match :{
+                                user : new mongoose.Types.ObjectId(req.user._id),
+                        },
+                },
+                {
+                        $lookup: {
+                                from : "projects",
+                                localField : "project",
+                                foreignField : "_id",
+                                as : "project",
+                                pipeline: [
+                                        {
+                                                $lookup: {
+                                                        from: "projectmembers",
+                                                        localField: "_id",
+                                                        foreignField: "project",
+                                                        as: "projectMembers"
+                                                }
+                                        },
+                                        {
+                                                $addFields: {
+                                                    members: {
+                                                            $size: { $ifNull: ["$projectMembers", []] }
+                                                       },
+                                                },
+                                        }
+                                ]
+
+                        }
+                },
+                {
+                          $unwind: "$project",
+                },
+                {
+                        $project : {
+                                project : {
+                                        _id : 1 ,
+                                        name :1 ,
+                                        description : 1,
+                                        members : 1 ,
+                                        createdAt: 1,
+                                        createdBy: 1,
+                                },
+                                role : 1 ,
+                                _id: 0,
+                        }
+                }
+        ])
+
+        console.log("the output is ",projects);
 
 
 }) 
@@ -216,6 +269,7 @@ const deleteMember = asyncHandler( async (req,res)=>{
 }) 
 
 export{
+        getProjects,
         createProject,
         getProjectsById,
         updateProject,
