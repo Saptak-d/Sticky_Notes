@@ -16,8 +16,8 @@ const updateNoteValidator = ()=>{
          body("content").trim()
         .notEmpty().withMessage("Content field is required"),
 
-        param("projectId").trim()
-        .notEmpty().withMessage("project ID is required")
+        param("noteId").trim()
+        .notEmpty().withMessage("Note ID is required")
     ]
 
 }
