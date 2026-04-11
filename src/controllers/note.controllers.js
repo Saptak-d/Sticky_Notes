@@ -30,3 +30,8 @@ const createNote = asyncHandler(async (req,res)=>{
      )
    
 })
+
+
+export{
+   createNote
+}
