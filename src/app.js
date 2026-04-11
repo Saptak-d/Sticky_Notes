@@ -16,6 +16,8 @@ import authRoute  from "./routes/auth.routes.js"
 import projectRouter from "./routes/project.routes.js"
 app.use("/api/v1/project",projectRouter);
 
+import noteRouter from "./routes/note.routes.js"
+app.use("/api/v1/note",noteRouter)
 
 
  app.use((err, req, res, next) => {
