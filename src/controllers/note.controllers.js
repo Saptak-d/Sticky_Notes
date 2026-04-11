@@ -57,5 +57,6 @@ const updateNote = asyncHandler(async(req,res)=>{
 })
 
 export{
-   createNote
+   createNote,
+   updateNote
 }
