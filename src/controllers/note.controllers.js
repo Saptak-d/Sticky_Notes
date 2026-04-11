@@ -30,6 +30,31 @@ const createNote = asyncHandler(async (req,res)=>{
    
 })
 
+const updateNote = asyncHandler(async(req,res)=>{
+    const {noteId} = req.params;
+    const {content} = req.body;
+
+     const existingNote  = await ProjectNote.findById(noteId);
+     if(!existingNote){
+      throw new ApiError(404,"Note not found")
+     }
+
+     if(existingNote.createdBy.toString() !=  req.user._id.toString()){
+      throw new ApiError(402,"You are not the owner of this note")
+     }
+
+     const note = await ProjectNote.findByIdAndUpdate(
+      noteId,
+      {content},
+      {new : true}
+     ).populate("createdBy", "username fullName avatar");
+
+     return res
+     .status(200)
+     .json(
+      new ApiResponse(200,note,"Note updated successfully")
+     )
+})
 
 export{
    createNote
