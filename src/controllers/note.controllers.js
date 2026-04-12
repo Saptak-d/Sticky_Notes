@@ -74,7 +74,7 @@ const updateNote = asyncHandler(async(req,res)=>{
 
 const deleteNote = asyncHandler(async(req,res)=>{
     const {noteId} = req.params;
-    const note = ProjectNote.findByIdAndDelete(noteId);
+    const note = await ProjectNote.findByIdAndDelete(noteId);
 
     if(!note){
       throw ApiError(404,"note not found")
