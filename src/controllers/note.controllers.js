@@ -86,12 +86,28 @@ const deleteNote = asyncHandler(async(req,res)=>{
      )
 });
 
+const getNoteById = asyncHandler(async(req,res)=>{
+  const {noteId} = req.params;
 
+   const note = await ProjectNote.findById(noteId)
+     .populate("createdBy", "username fullName avatar")
+
+     if(!note){
+       throw new ApiError(404,"Note not found")
+     }
+
+     return res
+      .status(200)
+      .json(
+         new ApiResponse(200,note,"note fetched successfully")
+      )
+});
 
 export{
    createNote,
    updateNote,
    getNotes,
    deleteNote,
+   getNoteById
 
 }
