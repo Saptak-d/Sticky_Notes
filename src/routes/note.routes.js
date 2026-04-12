@@ -14,7 +14,7 @@ router.route("/:projectId")
     .post(validateProjectPermission([UserRolesEnum.ADMIN]),createNoteValidator(),validator,createNote)
 
 router.route("/:projectId/:noteId")
-    .get(AvailableUserRoles(AvailableUserRoles),getNoteByIdValidator(),validator,getNoteById)
+    .get(validateProjectPermission(AvailableUserRoles),getNoteByIdValidator(),validator,getNoteById)
     .put(
          validateProjectPermission([UserRolesEnum.ADMIN]),
           updateNoteValidator(),
