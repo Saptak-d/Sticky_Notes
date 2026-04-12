@@ -6,13 +6,14 @@ import {Project} from "../models/project.models.js"
 import mongoose from "mongoose"
 
 const getNotes = asyncHandler(async(req,res)=>{
-  const projectId = req.params;
+  const {projectId} = req.params;
+   console.log(projectId)
 
    const project = await Project.findById(projectId);
    if(!project){
     throw new ApiError(404,"project not found")
    }
-   const  notes = await ProjectNote.find({project : project._id}).populate("createdBy", "userName fullName avatar");
+   const  notes = await ProjectNote.find({project : new mongoose.Types.ObjectId(projectId)}).populate("createdBy", "userName fullName avatar");
 
    return res
     .status(200)
@@ -71,11 +72,26 @@ const updateNote = asyncHandler(async(req,res)=>{
      )
 });
 
+const deleteNote = asyncHandler(async(req,res)=>{
+    const {noteId} = req.params;
+    const note = ProjectNote.findByIdAndDelete(noteId);
+
+    if(!note){
+      throw ApiError(404,"note not found")
+    }
+    return res
+     .status(200)
+     .json(
+      new ApiResponse(200,note,"note deleted successfully")
+     )
+});
+
 
 
 export{
    createNote,
    updateNote,
    getNotes,
-   
+   deleteNote,
+
 }
