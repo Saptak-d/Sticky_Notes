@@ -22,12 +22,4 @@ router.route("/:projectId/:noteId")
 
 
 
-
-
-
-
-
-
-
-
  export default router; 

@@ -5,6 +5,21 @@ import {asyncHandler} from "../utils/async-handler.js"
 import {Project} from "../models/project.models.js"
 import mongoose from "mongoose"
 
+const getNotes = asyncHandler(async(req,res)=>{
+  const projectId = req.params;
+
+   const project = await Project.findById(projectId);
+   if(!project){
+    throw new ApiError(404,"project not found")
+   }
+   const  notes = await ProjectNote.find({project : project._id}).populate("createdBy", "userName fullName avatar");
+
+   return res
+    .status(200)
+    .json(
+      new ApiResponse(200,notes,"Notes fetched successfully")
+    )
+});
 
 const createNote = asyncHandler(async (req,res)=>{
    const { projectId } = req.params;
@@ -54,7 +69,9 @@ const updateNote = asyncHandler(async(req,res)=>{
      .json(
       new ApiResponse(200,note,"Note updated successfully")
      )
-})
+});
+
+
 
 export{
    createNote,
