@@ -2,8 +2,8 @@ import { Router } from "express";
 import {validator} from "../middlewares/validator.middleware.js"
 import {verifyJWT ,validateProjectPermission} from "../middlewares/auth.middleware.js"
 import {AvailableUserRoles, UserRolesEnum} from "../utils/constants.js"
-import {createNoteValidator,updateNoteValidator,getNotesValidator} from "../validators/note.Validator.js"
-import { createNote,updateNote, getNotes } from "../controllers/note.controllers.js";
+import {createNoteValidator,updateNoteValidator,getNotesValidator,deleteNoteValidator} from "../validators/note.Validator.js"
+import { createNote,updateNote, getNotes,deleteNote } from "../controllers/note.controllers.js";
 
 const router = Router()
 
@@ -20,6 +20,7 @@ router.route("/:projectId/:noteId")
           validator,
           updateNote
         )
+    .delete(validateProjectPermission([UserRolesEnum.ADMIN]),deleteNoteValidator(),validator,deleteNote);
 
 
 

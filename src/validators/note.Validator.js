@@ -38,5 +38,5 @@ export{
     createNoteValidator,
     updateNoteValidator,
     getNotesValidator,
-
+    deleteNoteValidator
 }
