@@ -19,9 +19,16 @@ const updateNoteValidator = ()=>{
         param("noteId").trim()
         .notEmpty().withMessage("Note ID is required")
     ]
-
 }
+const getNotesValidator = ()=>{
+    return [
+        param("projectId").trim()
+         .notEmpty().withMessage("the project id is required")
+    ]
+}
+
 export{
     createNoteValidator,
-    updateNoteValidator
+    updateNoteValidator,
+    getNotesValidator
 }
