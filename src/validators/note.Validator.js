@@ -30,5 +30,6 @@ const getNotesValidator = ()=>{
 export{
     createNoteValidator,
     updateNoteValidator,
-    getNotesValidator
+    getNotesValidator,
+    
 }
