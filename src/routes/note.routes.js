@@ -2,8 +2,8 @@ import { Router } from "express";
 import {validator} from "../middlewares/validator.middleware.js"
 import {verifyJWT ,validateProjectPermission} from "../middlewares/auth.middleware.js"
 import {AvailableUserRoles, UserRolesEnum} from "../utils/constants.js"
-import {createNoteValidator,updateNoteValidator,getNotesValidator,deleteNoteValidator} from "../validators/note.Validator.js"
-import { createNote,updateNote, getNotes,deleteNote } from "../controllers/note.controllers.js";
+import {createNoteValidator,updateNoteValidator,getNotesValidator,deleteNoteValidator,getNoteByIdValidator} from "../validators/note.Validator.js"
+import { createNote,updateNote, getNotes,deleteNote,getNoteById} from "../controllers/note.controllers.js";
 
 const router = Router()
 
@@ -14,6 +14,7 @@ router.route("/:projectId")
     .post(validateProjectPermission([UserRolesEnum.ADMIN]),createNoteValidator(),validator,createNote)
 
 router.route("/:projectId/:noteId")
+    .get(AvailableUserRoles(AvailableUserRoles),getNoteByIdValidator(),validator,getNoteById)
     .put(
          validateProjectPermission([UserRolesEnum.ADMIN]),
           updateNoteValidator(),
