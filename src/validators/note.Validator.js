@@ -32,11 +32,19 @@ const deleteNoteValidator = ()=>{
         param("noteId").trim()
          .notEmpty().withMessage("note Id is required")
     ]
+};
+
+const noteIdValidatot = ()=>{
+    return[
+        param("noteId").trim()
+         .notEmpty().withMessage("the note ID is required")
+    ]
 }
 
 export{
     createNoteValidator,
     updateNoteValidator,
     getNotesValidator,
-    deleteNoteValidator
+    deleteNoteValidator,
+    noteIdValidatot
 }
