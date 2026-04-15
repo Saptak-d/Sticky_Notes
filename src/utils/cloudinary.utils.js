@@ -10,11 +10,9 @@ cloudinary.config({
 })
 
 const uploadOnCloudinary = (async(localFilePath)=>{
+     const fixedPath = localFilePath.replace(/\\/g, "/")
     try {
         if(!localFilePath) return null;
-    
-        const fixedPath = localFilePath.replace(/\\/g, "/")
-    
             const response = await cloudinary.uploader.upload(fixedPath,{
                 resource_type : "auto",
             })

@@ -34,11 +34,26 @@ const taskSchema = new Schema({
     attachments :{
          type:[
             {
-               url: String,
-               public_id: String,
-               mimetype: String,
-               size: Number,
-               originalName: String,
+               url : {
+                type :String ,//cloudinary url
+                required : true
+               },
+                public_id :{
+                 type : String ,
+                 required : true ,
+               },
+                mimetype: {
+                 type : String ,
+                 required : true ,
+               },
+                size: {
+                    type : Number ,
+                     required : true
+                 },
+                originalName :{
+                    type : String,
+                    required :true
+                }
             }
         ],
         default : []
