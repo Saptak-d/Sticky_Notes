@@ -14,7 +14,12 @@ const uploadOnCloudinary = (async(localFilePath)=>{
     try {
         if(!localFilePath) return null;
             const response = await cloudinary.uploader.upload(fixedPath,{
-                resource_type : "auto",
+               resource_type: "auto",
+          folder: "task_attachments",
+             type: "upload",       
+            access_mode: "public",   
+             use_filename: true,
+             unique_filename: true,
             })
             fs.unlinkSync(fixedPath);
             return response;
@@ -24,7 +29,6 @@ const uploadOnCloudinary = (async(localFilePath)=>{
             console.log("File is removed ")
         
     }
-    
 
 })
 

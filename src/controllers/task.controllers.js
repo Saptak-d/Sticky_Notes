@@ -15,12 +15,12 @@ const createTask = (asyncHandler(async(req,res)=> {
         throw new ApiError(404,"Project not found")
      }
 
-      const files = req.files || [];
-   
+      const files = req.files || [];  
 
        const cloudinaryUploads  = await Promise.all(
          files.map(async (file)=>{
             const response = await uploadOnCloudinary(file.path)
+      
             return{
                url : response.secure_url,
                public_id : response.public_id,
@@ -31,8 +31,7 @@ const createTask = (asyncHandler(async(req,res)=> {
          })
        )
 
-       console.log("the fetails",cloudinaryUploads[0])
-      const task = Task.create({
+      const task = await Task.create({
          title,
          description,
          assignedTo ,
@@ -45,7 +44,7 @@ const createTask = (asyncHandler(async(req,res)=> {
       if(!task){
          throw new ApiError(500,"Internal server Error")
       }
-
+      
       return res
        .status(201)
        .json(
