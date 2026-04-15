@@ -34,9 +34,11 @@ const taskSchema = new Schema({
     attachments :{
          type:[
             {
-                url : String,
-                 memetype : String,
-                 size : Number
+               url: String,
+               public_id: String,
+               mimetype: String,
+               size: Number,
+               originalName: String,
             }
         ],
         default : []
