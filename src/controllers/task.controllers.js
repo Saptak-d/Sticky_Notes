@@ -16,7 +16,7 @@ const createTask = (asyncHandler(async(req,res)=> {
      }
 
       const files = req.files || [];
-      console.log("the file related details are --",files[0]);
+   
 
        const cloudinaryUploads  = await Promise.all(
          files.map(async (file)=>{
@@ -31,6 +31,7 @@ const createTask = (asyncHandler(async(req,res)=> {
          })
        )
 
+       console.log("the fetails",cloudinaryUploads[0])
       const task = Task.create({
          title,
          description,
@@ -54,5 +55,5 @@ const createTask = (asyncHandler(async(req,res)=> {
 
 export{
    createTask,
-   
+
 }
