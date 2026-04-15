@@ -62,16 +62,19 @@ const getProjects = asyncHandler( async (req,res)=>{
                 }
         ])
 
-        console.log("the output is ",projects);
-
-
+   if(!projects){
+        throw new ApiError(404,"No project found")
+   }
+   return res
+     .status(200)
+     .json(
+         new ApiResponse(200,projects,"The projects fetched successfully")
+     )
 }) 
 
 
 const getProjectsById = asyncHandler( async (req,res)=>{
         const { projectId } = req.params;  
-        console.log("the project id is ",projectId)
-
         const project  = await Project.findById(projectId);
 
         if(!project){
@@ -197,6 +200,7 @@ const addMemberToProject = asyncHandler( async (req,res)=>{
 
 const getProjectMembers = asyncHandler( async (req,res)=>{
         const{projectId} = req.params;
+        console.log("am i being called or not ")
         const projectMembers  = await ProjectMember.find({
                 project : projectId
         }).populate("user", "username email fullname avatar")

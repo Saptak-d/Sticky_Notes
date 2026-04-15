@@ -19,6 +19,9 @@ app.use("/api/v1/project",projectRouter);
 import noteRouter from "./routes/note.routes.js"
 app.use("/api/v1/note",noteRouter)
 
+import taskRouter from "./routes/task.routes.js"
+app.use("/api/v1/task",taskRouter)
+
 
  app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500

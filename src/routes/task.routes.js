@@ -15,6 +15,7 @@ router.use(verifyJWT)
 router.route("/:projectId")
    .post(
      validateProjectPermission([UserRolesEnum.ADMIN , UserRolesEnum.PROJECT_ADMIN]),
+     upload.array("attachments"),
      createTaskValidator(),
      validator,
      createTask,
