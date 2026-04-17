@@ -200,15 +200,53 @@ const addMemberToProject = asyncHandler( async (req,res)=>{
 
 const getProjectMembers = asyncHandler( async (req,res)=>{
         const{projectId} = req.params;
-        console.log("am i being called or not ")
-        const projectMembers  = await ProjectMember.find({
-                project : projectId
-        }).populate("user", "username email fullname avatar")
-        .populate("project")
+        const projectMembers  = await ProjectMember.aggregate([
+                {
+                        $match : {
+                                project :new mongoose.Types.ObjectId(projectId)
+                        }
+                },
+                {
+                        $lookup: {
+                                from : "users",
+                                localField : "user",
+                                foreignField: "_id",
+                                as : "user"
+                        }
+                },
+                  {
+                      $unwind: "$user"
+                   },
 
-        if(!projectMembers){
-                throw new ApiError(404,"Project Members Not Found")
-        }
+                {
+                        $lookup : {
+                                from : "projects",
+                                localField : "project",
+                                foreignField : "_id",
+                                as : "project"
+                        }
+                },
+                 {
+                        $unwind : "$project"
+                 },
+                  {
+                        $group : {
+                                _id : "$project._id",
+                                project : {$first : "$project"},
+                                totalMembers : {$sum : 1} ,
+
+                                users : {
+                                        $push : {
+                                                 avatar: "$user.avatar",
+                                                  username: "$user.username",
+                                                  email: "$user.email",
+                                                  fullname: "$user.fullname"
+                                        }
+                                }
+                        }
+                  }
+        ])
+
 
         return res
         .status(200)
