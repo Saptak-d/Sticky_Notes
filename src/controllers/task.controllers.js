@@ -19,6 +19,15 @@ const getTask  = asyncHandler(async(req,res)=>{
             project : new mongoose.Types.ObjectId(project)
          }
       },
+       {
+         $lookup : {
+            from : "projects",
+            localField : "project",
+            foreignField : "_id",
+            as           : "Project_Details"
+         }
+       },
+        {$unwind : "$Project_Details"},
       {
          $lookup : {
             from : "users",
@@ -27,6 +36,7 @@ const getTask  = asyncHandler(async(req,res)=>{
                       as : "assignedBy"
          }
       },
+       {$unwind : "$assignedBy"},
       {
           $lookup : {
               from : "users",
@@ -34,7 +44,31 @@ const getTask  = asyncHandler(async(req,res)=>{
             foreignField : "_id",
                       as : "assignedTo"
           }
+      },
+         {$unwind : "$assignedTo"},
+      {
+         $project:{
+               title : 1,
+               description : 1 ,
+               Project_Details : {
+                  name : 1,
+                  description : 1,
+               },
+               assignedBy : {
+                  avatar : 1 ,
+                  username : 1,
+                  email : 1,
+                  fullname : 1,
+               },
+               assignedTo : {
+                  avatar : 1,
+                  username : 1,
+                  email : 1,
+                  fullname : 1,
+               }
+         }
       }
+   
     ]);
 
     console.log("the Task is--",task);
@@ -42,7 +76,7 @@ const getTask  = asyncHandler(async(req,res)=>{
     return res
      .status(200)
      .json(
-       new ApiResponse(200,)
+       new ApiResponse(200,task,"the taskes are fetched successfully")
      )
 })
 const createTask = (asyncHandler(async(req,res)=> {
