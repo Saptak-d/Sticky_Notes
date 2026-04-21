@@ -4,7 +4,47 @@ import { ApiResponse } from "../utils/api-response.js";
 import {asyncHandler} from "../utils/async-handler.js"
 import {Project} from '../models/project.models.js'
 import { uploadOnCloudinary } from "../utils/cloudinary.utils.js";
+import mongoose, { mongo } from "mongoose";
 
+const getTask  = asyncHandler(async(req,res)=>{
+    const {projectId} = req.params
+    const project = await Project.findById(projectId);
+
+    if(!project){
+      throw new ApiError(404,"Project not Found")
+    }
+    const task = await Task.aggregate([
+      {
+         $match : {
+            project : new mongoose.Types.ObjectId(project)
+         }
+      },
+      {
+         $lookup : {
+            from : "users",
+            localField : "assignedBy",
+            foreignField : "_id",
+                      as : "assignedBy"
+         }
+      },
+      {
+          $lookup : {
+              from : "users",
+            localField : "assignedTo",
+            foreignField : "_id",
+                      as : "assignedTo"
+          }
+      }
+    ]);
+
+    console.log("the Task is--",task);
+
+    return res
+     .status(200)
+     .json(
+       new ApiResponse(200,)
+     )
+})
 const createTask = (asyncHandler(async(req,res)=> {
 
     const { title, description, assignedTo, status } = req.body;
@@ -51,6 +91,8 @@ const createTask = (asyncHandler(async(req,res)=> {
           new ApiResponse(201,task,"The New Task created Successfully")
        )
 }));
+
+
 
 export{
    createTask,
