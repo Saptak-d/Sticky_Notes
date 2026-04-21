@@ -13,6 +13,12 @@ const router = Router()
 router.use(verifyJWT)
 
 router.route("/:projectId")
+    .get(
+      validateProjectPermission(AvailableUserRoles),
+      getTaskValidation(),
+      validator,
+      getTask
+   )
    .post(
      validateProjectPermission([UserRolesEnum.ADMIN , UserRolesEnum.PROJECT_ADMIN]),
      upload.array("attachments"),
