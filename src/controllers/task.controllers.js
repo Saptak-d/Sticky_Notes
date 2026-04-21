@@ -96,5 +96,6 @@ const createTask = (asyncHandler(async(req,res)=> {
 
 export{
    createTask,
+   getTask,
 
 }
