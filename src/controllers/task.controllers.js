@@ -78,7 +78,8 @@ const getTask  = asyncHandler(async(req,res)=>{
      .json(
        new ApiResponse(200,task,"the taskes are fetched successfully")
      )
-})
+});
+
 const createTask = (asyncHandler(async(req,res)=> {
 
     const { title, description, assignedTo, status } = req.body;
@@ -126,10 +127,42 @@ const createTask = (asyncHandler(async(req,res)=> {
        )
 }));
 
+const updateTask = asyncHandler(async(req,res)=>{
+  const {taskId} = req.params;
+  const existingTask = await Task.findById(taskId);
+
+  if(!existingTask){
+    throw new ApiError(404,"Task not Found")
+  }
+  if(Object.keys(req.body).length === 0){
+   throw new ApiError(400,"No fields provided for update ")
+  }
+
+  const updatedTask = await Task.findByIdAndUpdate(
+   taskId,
+   {
+      $set : req.body
+   },
+   {
+      new : true,
+      runValidators : true,
+   }
+  );
+
+  return res
+   .status(200)
+   .json(
+      new ApiResponse(200,updateTask,"the Task successfully Updated")
+   )
+})
+
+
 
 
 export{
    createTask,
    getTask,
+   updateTask,
+   
 
 }
