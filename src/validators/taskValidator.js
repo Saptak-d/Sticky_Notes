@@ -28,9 +28,39 @@ const  getTaskValidation = ()=>{
     ]
 }
 
+const updateTaskValidation = () => {
+  return [
+    body("title")
+      .optional()
+      .trim()
+      .notEmpty()
+      .withMessage("Title cannot be empty"),
+
+    body("description")
+      .optional()
+      .trim()
+      .notEmpty()
+      .withMessage("Description cannot be empty"),
+
+    body("status")
+      .optional()
+      .trim()
+      .notEmpty()
+      .withMessage("Status cannot be empty"),
+
+    body("assignedTo")
+      .optional()
+      .trim()
+      .notEmpty()
+      .withMessage("assignedTo cannot be empty"),
+  ];
+};
+
 export{
     createTaskValidator,
     getTaskValidation,
+    updateTask,
+
 
     
 }
