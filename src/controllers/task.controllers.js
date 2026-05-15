@@ -3,7 +3,7 @@ import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
 import {asyncHandler} from "../utils/async-handler.js"
 import {Project} from '../models/project.models.js'
-import { uploadOnCloudinary } from "../utils/cloudinary.utils.js";
+import { uploadOnCloudinary,deleteOnCloudinary } from "../utils/cloudinary.utils.js";
 import mongoose, { mongo } from "mongoose";
 
 const getTask  = asyncHandler(async(req,res)=>{
@@ -134,15 +134,46 @@ const updateTask = asyncHandler(async(req,res)=>{
   if(!existingTask){
     throw new ApiError(404,"Task not Found")
   }
-  if(Object.keys(req.body).length === 0){
+   const files = req.files || [];
+ 
+    let uploadedDocuments = [];
+
+    if(files.length > 0){
+
+      uploadedDocuments = await Promise.all(
+       files.map(async(file)=>{
+         const response  = await cloudinaryUploads(file.path);
+
+         return {
+            url : response.secure_url,
+            public_id : response.public_id,
+             mimetype: file.mimetype,
+             size: response.bytes, 
+            originalName: file.originalname,
+         }
+       })
+     )  
+    }
+
+  if(Object.keys(req.body).length === 0 && uploadedDocuments.length === 0){
    throw new ApiError(400,"No fields provided for update ")
   }
 
+  const updateQuery = {
+   $set : req.body,
+  };
+
+   if(uploadedDocuments.length > 0){
+      updateQuery.$push = {
+         attachments : {
+            $each : uploadedDocuments
+         }
+      }
+   }
+
   const updatedTask = await Task.findByIdAndUpdate(
    taskId,
-   {
-      $set : req.body
-   },
+   updateQuery,
    {
       new : true,
       runValidators : true,

@@ -48,7 +48,6 @@ const taskSchema = new Schema({
                },
                 size: {
                     type : Number ,
-                     required : true
                  },
                 originalName :{
                     type : String,

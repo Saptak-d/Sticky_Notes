@@ -59,7 +59,8 @@ const updateTaskValidation = () => {
 export{
     createTaskValidator,
     getTaskValidation,
-    updateTask,
+    updateTaskValidation,
+    
 
 
     

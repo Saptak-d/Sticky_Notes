@@ -4,8 +4,8 @@ import {validator} from "../middlewares/validator.middleware.js"
 import {verifyJWT} from "../middlewares/auth.middleware.js"
 import {validateProjectPermission} from "../middlewares/auth.middleware.js"
 import { AvailableUserRoles, UserRolesEnum } from "../utils/constants.js";
-import {createTask, getTask } from "../controllers/task.controllers.js";
-import {createTaskValidator, getTaskValidation} from "../validators/taskValidator.js"
+import {createTask, getTask , updateTask} from "../controllers/task.controllers.js";
+import {createTaskValidator, getTaskValidation,updateTaskValidation} from "../validators/taskValidator.js"
 
 
 
@@ -26,7 +26,15 @@ router.route("/:projectId")
      validator,
      createTask,
    )
-
+   
+router.route("/:projectId/t/:taskId")
+.patch(
+    validateProjectPermission([[UserRolesEnum.ADMIN , UserRolesEnum.PROJECT_ADMIN]]),
+     upload.array("attachments"),
+    updateTaskValidation(),
+    validator,
+    updateTask
+   )
 
 
 export default router;
