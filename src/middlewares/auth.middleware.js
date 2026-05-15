@@ -47,6 +47,7 @@ export const validateProjectPermission = (role = [])=>
         throw new ApiError(404,"You are not part of this project")
     }
     const givenRole = project?.role;
+    console.log("The roles are ",givenRole)
     if(!role.includes(givenRole)){
         throw new ApiError(403,
              "You do not have permission to perform this action",

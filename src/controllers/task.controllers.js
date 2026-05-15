@@ -24,7 +24,7 @@ const getTask  = asyncHandler(async(req,res)=>{
             from : "projects",
             localField : "project",
             foreignField : "_id",
-            as           : "Project_Details"
+                      as : "Project_Details"
          }
        },
         {$unwind : "$Project_Details"},
@@ -50,6 +50,10 @@ const getTask  = asyncHandler(async(req,res)=>{
          $project:{
                title : 1,
                description : 1 ,
+                attachments: {
+               url: 1,
+              }
+               ,
                Project_Details : {
                   name : 1,
                   description : 1,
@@ -70,9 +74,6 @@ const getTask  = asyncHandler(async(req,res)=>{
       }
    
     ]);
-
-    console.log("the Task is--",task);
-
     return res
      .status(200)
      .json(
@@ -142,7 +143,7 @@ const updateTask = asyncHandler(async(req,res)=>{
 
       uploadedDocuments = await Promise.all(
        files.map(async(file)=>{
-         const response  = await cloudinaryUploads(file.path);
+         const response  = await uploadOnCloudinary(file.path);
 
          return {
             url : response.secure_url,
