@@ -299,7 +299,7 @@ const deleteTask = asyncHandler(async(req,res)=>{
    return res
     .status(200)
     .json(
-      new ApiError(200,task,"The Task is Deleted Successfully")
+      new ApiResponse(200,task,"The Task is Deleted Successfully")
     )
 })
 
