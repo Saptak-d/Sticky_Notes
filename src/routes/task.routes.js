@@ -5,7 +5,7 @@ import {verifyJWT} from "../middlewares/auth.middleware.js"
 import {validateProjectPermission} from "../middlewares/auth.middleware.js"
 import { AvailableUserRoles, UserRolesEnum } from "../utils/constants.js";
 import {createTask, getTask , getTaskById, updateTask} from "../controllers/task.controllers.js";
-import {createTaskValidator, getTaskValidation,updateTaskValidation} from "../validators/taskValidator.js"
+import {createTaskValidator, getTaskValidation,updateTaskValidation,getTaskByIdValidator} from "../validators/taskValidator.js"
 
 // 699407cdba4132d843b3317f = saptakdutta95
 
@@ -28,7 +28,7 @@ router.route("/:projectId")
    )
    
 router.route("/:projectId/t/:taskId")
-   .get(getTaskById)
+   .get(getTaskByIdValidator(),validator,getTaskById)
    .patch(
     validateProjectPermission([UserRolesEnum.ADMIN , UserRolesEnum.PROJECT_ADMIN]),
      upload.array("attachments"),
