@@ -56,10 +56,20 @@ const updateTaskValidation = () => {
   ];
 };
 
+const getTaskByIdValidator = ()=>{
+  return[
+    param("taskId")
+     .trim()
+     .notEmpty().withMessage("The Task id is Required")
+  ]
+}
+
 export{
     createTaskValidator,
     getTaskValidation,
     updateTaskValidation,
+    getTaskByIdValidator,
+    
     
 
 
