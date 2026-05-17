@@ -64,12 +64,20 @@ const getTaskByIdValidator = ()=>{
   ]
 }
 
+const deleteTaskValidation = ()=>{
+  return[
+    param("taskId").trim()
+     .notEmpty().withMessage("the TaskId is required")
+  ]
+}
+
 export{
     createTaskValidator,
     getTaskValidation,
     updateTaskValidation,
     getTaskByIdValidator,
-    
+    deleteTaskValidation,
+
     
 
 
