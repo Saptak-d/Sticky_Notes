@@ -128,6 +128,95 @@ const createTask = (asyncHandler(async(req,res)=> {
        )
 }));
 
+const getTaskById = asyncHandler(async (req,res)=>{
+   const {taskId} = req.params;
+   const task  = await Task.aggregate([
+      {
+         $match : {
+            _id : new mongoose.Types.ObjectId(taskId)
+         }
+      },
+      {
+         $lookup : {
+            from : "users",
+            localField : "assignedTo",
+            foreignField : "_id",
+              as : "assignedTo",
+              pipeline : [{  
+                $project : {
+                _id: 1,
+                 username: 1,
+                 fullname: 1,
+                 avatar: 1,
+                }}
+              ]
+         }
+      },
+      // {$unwind : "$assignedTo"},
+      {
+         $lookup : {
+            from : "subtasks",
+            localField : "_id",
+            foreignField : "task",
+            as : "subtasks",
+            pipeline : [
+               {
+                  $lookup : {
+                     from : "users",
+                     localField : "createdBy",
+                     foreignField : "_id",
+                      as :"createdBy",
+                      pipeline :[
+                      {  $project : {
+                           _id : 1 ,
+                           username : 1,
+                           fullname : 1 ,
+                           avatar : 1
+                        }}
+                      ]
+                  }
+               },
+               {
+                  $addFields : {
+                     createdBy : {
+                        $arrayElemAt : ["$createdBy",0],
+                     }
+                  }
+               }
+            ]
+         }
+      },
+      {
+         $addFields : {
+            assignedTo : {
+               $arrayElemAt : ["$assignedTo", 0]
+            }
+         }
+      },
+      {
+         $lookup : {
+            from : "users",
+            localField : "assignedBy",
+            foreignField : "_id",
+            as : "assignedBy",
+            pipeline : [
+               {$project : {
+                  id : 1 ,
+                  username : 1,
+                  fullname : 1 ,
+                  avatar : 1,
+               }},
+               
+            ]
+         }
+      },
+      {$unwind : "$assignedBy"}
+      
+   ]);
+
+   console.log(task)
+})
+
 const updateTask = asyncHandler(async(req,res)=>{
   const {taskId} = req.params;
   const existingTask = await Task.findById(taskId);
@@ -186,7 +275,9 @@ const updateTask = asyncHandler(async(req,res)=>{
    .json(
       new ApiResponse(200,updatedTask,"the Task successfully Updated")
    )
-})
+});
+
+
 
 
 
@@ -195,6 +286,7 @@ export{
    createTask,
    getTask,
    updateTask,
+   getTaskById
 
 
 }
