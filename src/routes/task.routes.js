@@ -4,8 +4,8 @@ import {validator} from "../middlewares/validator.middleware.js"
 import {verifyJWT} from "../middlewares/auth.middleware.js"
 import {validateProjectPermission} from "../middlewares/auth.middleware.js"
 import { AvailableUserRoles, UserRolesEnum } from "../utils/constants.js";
-import {createTask, getTask , getTaskById, updateTask} from "../controllers/task.controllers.js";
-import {createTaskValidator, getTaskValidation,updateTaskValidation,getTaskByIdValidator} from "../validators/taskValidator.js"
+import {createTask, getTask , getTaskById, updateTask ,de} from "../controllers/task.controllers.js";
+import {createTaskValidator, getTaskValidation,updateTaskValidation,getTaskByIdValidator,deleteTaskValidation} from "../validators/taskValidator.js"
 
 // 699407cdba4132d843b3317f = saptakdutta95
 
@@ -35,6 +35,13 @@ router.route("/:projectId/t/:taskId")
     updateTaskValidation(),
     validator,
     updateTask
+    )
+    .delete(
+      validateProjectPermission([UserRolesEnum.ADMIN , UserRolesEnum.PROJECT_ADMIN]),
+      deleteTaskValidation(),
+      validator,
+      deleteTask
+      
     )
 
 

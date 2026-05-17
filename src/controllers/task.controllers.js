@@ -301,7 +301,8 @@ export{
    createTask,
    getTask,
    updateTask,
-   getTaskById
+   getTaskById,
+   deleteTask
 
 
 }
