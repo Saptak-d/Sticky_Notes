@@ -147,7 +147,9 @@ const getTaskById = asyncHandler(async (req,res)=>{
                 _id: 1,
                  username: 1,
                  fullname: 1,
-                 avatar: 1,
+                 avatar: {
+                  url : 1,
+                 },
                 }}
               ]
          }
@@ -204,7 +206,9 @@ const getTaskById = asyncHandler(async (req,res)=>{
                   id : 1 ,
                   username : 1,
                   fullname : 1 ,
-                  avatar : 1,
+                  avatar : {
+                     url : 1
+                  },
                }},
                
             ]
@@ -213,8 +217,15 @@ const getTaskById = asyncHandler(async (req,res)=>{
       {$unwind : "$assignedBy"}
       
    ]);
+   if(!task){
+      throw new ApiError(404,"Task not found")
+   }
 
-   console.log(task)
+   return res
+    .status(200)
+    .json(
+      new ApiResponse(200,task,"Task fetched successfully")
+    )
 })
 
 const updateTask = asyncHandler(async(req,res)=>{
