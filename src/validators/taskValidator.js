@@ -71,12 +71,25 @@ const deleteTaskValidation = ()=>{
   ]
 }
 
+const createSubTaskValidation = ()=>{
+  return [
+    param("taskId")
+     .trim()
+     .notEmpty().withMessage("The task id "),
+
+    body("title").trim()
+      .notEmpty().withMessage("The title is required")
+  ]
+}
+
 export{
     createTaskValidator,
     getTaskValidation,
     updateTaskValidation,
     getTaskByIdValidator,
     deleteTaskValidation,
+    createSubTaskValidation,
+    
 
     
 

@@ -341,7 +341,8 @@ export{
    getTask,
    updateTask,
    getTaskById,
-   deleteTask
+   deleteTask,
+   createSubTask
 
 
 }
