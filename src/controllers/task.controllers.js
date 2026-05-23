@@ -5,6 +5,7 @@ import {asyncHandler} from "../utils/async-handler.js"
 import {Project} from '../models/project.models.js'
 import { uploadOnCloudinary,deleteOnCloudinary } from "../utils/cloudinary.utils.js";
 import mongoose, { mongo } from "mongoose";
+import {SubTask} from "../models/subtasks.model.js"
 
 const getTask  = asyncHandler(async(req,res)=>{
     const {projectId} = req.params
@@ -303,7 +304,34 @@ const deleteTask = asyncHandler(async(req,res)=>{
     )
 })
 
+const createSubTask = asyncHandler(async(req,res)=>{
+   const {taskId} = req.params;
+   const {title} = req.body;
+   
+  if (!title) {
+    throw new ApiError(400, "Title is required");
+  }
 
+  const task = await Task.findById(taskId);
+
+  if(!task){
+   throw new ApiError(404,"Tassk not Found")
+  }
+
+  const subTask = await SubTask.create({
+    title,
+    task : taskId ,
+    createdBy : new mongoose.Types.ObjectId(req.user._id)
+  })
+
+  if(!subTask){
+    throw new ApiError(500,"Internal server Error while creating SubTask")
+  }
+  
+  return res
+    .status(201)
+    .json(new ApiResponse(201,subTask,"Sub task create successfully"))
+})
 
 
 
