@@ -291,17 +291,22 @@ const updateTask = asyncHandler(async(req,res)=>{
 const deleteTask = asyncHandler(async(req,res)=>{
    const {taskId} = req.params ;
     
-   const task = await Task.findByIdAndDelete(taskId);
+   const task = await Task.findById(taskId);
 
    if(!task){
       throw new ApiError(404,"Task is not found")
    }
 
+   await SubTask.deleteMany({task : taskId});
+
+   await Task.findByIdAndDelete(taskId);
+
    return res
-    .status(200)
-    .json(
-      new ApiResponse(200,task,"The Task is Deleted Successfully")
-    )
+   .status(200)
+   .json(
+      new ApiResponse(200,{},"Task and Related subTaskes are deleted successfully")
+   )
+
 })
 
 const createSubTask = asyncHandler(async(req,res)=>{
