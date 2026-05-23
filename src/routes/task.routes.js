@@ -44,6 +44,16 @@ router.route("/:projectId/t/:taskId")
       
     )
 
-
+router
+  .route("/:projectId/t/:taskId/subtasks")
+   .post(
+    validateProjectPermission([
+      UserRolesEnum.ADMIN ,
+      UserRolesEnum.PROJECT_ADMIN
+    ]),
+    createSubTaskValidation(),
+    validator,
+    createSubTask
+   )
 
 export default router;
